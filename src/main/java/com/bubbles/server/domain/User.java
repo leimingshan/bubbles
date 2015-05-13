@@ -23,13 +23,14 @@ public class User {
     private int giveReplyNum;
     private int getReplyNum;
     private int getUpNum;
+    private int giveUpNum;
 
-    public int getGiveUpNum() {
-        return giveUpNum;
+    public long getId() {
+        return id;
     }
 
-    public void setGiveUpNum(int giveUpNum) {
-        this.giveUpNum = giveUpNum;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getDeviceId() {
@@ -112,7 +113,13 @@ public class User {
         this.getUpNum = getUpNum;
     }
 
-    private int giveUpNum;
+    public int getGiveUpNum() {
+        return giveUpNum;
+    }
+
+    public void setGiveUpNum(int giveUpNum) {
+        this.giveUpNum = giveUpNum;
+    }
 
     @Override
     public String toString() {
