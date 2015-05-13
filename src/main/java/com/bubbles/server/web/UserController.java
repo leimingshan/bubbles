@@ -3,6 +3,7 @@ package com.bubbles.server.web;
 import com.bubbles.server.domain.User;
 import com.bubbles.server.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -26,6 +27,19 @@ public class UserController {
         User user = userRepository.findByDeviceId(deviceId);
         user.setAvatar(getBytes(1));
         return user;
+    }
+
+    @RequestMapping(value="/deviceId/avatar", method=RequestMethod.POST)
+    public int uploadAvatar(@ModelAttribute User user, BindingResult result)
+    {
+        if (result.hasErrors()) {
+            System.out.println(result.toString());
+        }
+        if (user != null) {
+            int a = userRepository.setAvatarByDeviceId(getBytes(1), user.getDeviceId());
+            return  a;
+        }
+        return 0;
     }
 
     private static byte[] getBytes(int data)
