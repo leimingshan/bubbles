@@ -1,6 +1,7 @@
 package com.bubbles.server.domain;
 
 import com.bubbles.server.BubblesApplication;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,5 +43,17 @@ public class UserRepositoryTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.gender").value("m"));
+    }
+
+    @Test
+    public void getUserConvert() throws Exception {
+        String jsonString = this.mockMvc.perform(get("/user/deviceId/000000000000000")
+                .characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        User user = mapper.readValue(jsonString, User.class);
+        assertEquals(user.getDeviceId(), "000000000000000");
     }
 }
