@@ -23,9 +23,8 @@ public class UserController {
     }
 
     @RequestMapping(value="/deviceId/{deviceId}", method = RequestMethod.GET)
-    public User user(@PathVariable String deviceId) {
+    public User userByDeviceId(@PathVariable String deviceId) {
         User user = userRepository.findByDeviceId(deviceId);
-        user.setAvatar(getBytes(1));
         return user;
     }
 
