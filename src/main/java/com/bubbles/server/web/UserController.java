@@ -28,7 +28,7 @@ public class UserController {
         return user;
     }
 
-    @RequestMapping(value="/deviceId/avatar", method=RequestMethod.POST)
+    @RequestMapping(value="/avatar", method=RequestMethod.POST)
     public int uploadAvatar(@ModelAttribute User user, BindingResult result)
     {
         if (result.hasErrors()) {
