@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by LMSH on 2015/5/12.
  */
-@RepositoryRestResource(collectionResourceRel = "people", path = "people")
+@RepositoryRestResource(collectionResourceRel = "user")
 public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByDeviceId(String deviceId);
