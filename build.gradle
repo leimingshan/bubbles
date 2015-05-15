@@ -22,6 +22,7 @@ apply plugin: 'war'
 war {
     baseName = 'bubbles'
     version = '0.0.1-SNAPSHOT'
+    archiveName = 'bubbles.war'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -55,3 +56,81 @@ eclipse {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
+
+
+// deploy to local tomcat server
+
+// All extra properties must be defined through the "ext" namespace.
+ext.tomcatHome = System.getenv()["CATALINA_HOME"]
+ext.tomcatBin = tomcatHome + '/bin'
+ext.tomcatStart = tomcatBin + '/startup'
+ext.tomcatStop = tomcatBin + '/shutdown'
+ext.tomcatWebapps = tomcatHome + '/webapps'
+
+ant.condition(property: "os", value: "windows") { os(family: "windows") }
+ant.condition(property: "os", value: "unix"   ) { os(family: "unix")    }
+
+task checkTomcatPath << {
+    if (tomcatHome == null)
+        throw new RuntimeException("Could not get TOMCAT home, please set CATALINA_HOME env virable first!")
+    switch(ant.properties.os){
+        case 'windows':
+            println 'Running on windows.'
+            tomcatStart += '.bat'
+            tomcatStop += '.bat'
+            break
+        case 'unix':
+            println 'Running on unix.'
+            tomcatStart += '.sh'
+            tomcatStop += '.sh'
+            break
+    }
+}
+
+task deployLocal << {
+    println "copy war from ${buildDir}/libs into ${tomcatWebapps}"
+    copy{
+        from "${buildDir}/libs"
+        into "${tomcatWebapps}"
+        include '*.war'
+    }
+    println "start tomcat !"
+    startTomcat.execute()
+}
+
+deployLocal.dependsOn checkTomcatPath
+
+task startTomcat << {
+    exec {
+        executable tomcatStart
+    }
+    println 'Start Tomcat server.'
+    //store the output instead of printing to the console:
+    standardOutput = new ByteArrayOutputStream()
+
+    //extension method stopTomcat.output() can be used to obtain the output:
+    ext.output = {
+        return standardOutput.toString()
+    }
+    println 'Done.'
+}
+
+startTomcat.dependsOn checkTomcatPath
+
+task stopTomcat << {
+    exec {
+        executable tomcatStop
+    }
+    println 'Shutting down Tomcat server.'
+
+    //store the output instead of printing to the console:
+    standardOutput = new ByteArrayOutputStream()
+    //extension method stopTomcat.output() can be used to obtain the output:
+    ext.output = {
+        return standardOutput.toString()
+    }
+    println 'Done.'
+}
+
+stopTomcat.dependsOn checkTomcatPath
+
