@@ -5,6 +5,10 @@ import com.bubbles.server.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Created by LMSH on 2015/5/11.
@@ -12,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -24,20 +30,28 @@ public class UserController {
 
     @RequestMapping(value="/deviceId/{deviceId}", method = RequestMethod.GET)
     public User userByDeviceId(@PathVariable String deviceId) {
-        User user = userRepository.findByDeviceId(deviceId);
-        return user;
+        List<User> userList = userRepository.findByDeviceId(deviceId);
+        if (userList.size() != 1) {
+            logger.error("ERROR: Get more than one user by deviceId");
+            return null;
+        }
+        return userList.get(0);
     }
 
-    @RequestMapping(value="/avatar", method=RequestMethod.POST)
-    public int uploadAvatar(@ModelAttribute User user, BindingResult result)
+    @RequestMapping(value="/{userId}/avatar", method=RequestMethod.PATCH)  // Partially update
+    public int uploadAvatar(@PathVariable long userId, @RequestParam("avatar") byte[] avatar)
     {
-        if (result.hasErrors()) {
-            System.out.println(result.toString());
+        if (!userRepository.exists(userId)) {
+            return 0;
         }
-        if (user != null) {
-            int a = userRepository.setAvatarByDeviceId(getBytes(1), user.getDeviceId());
-            return  a;
-        }
+        return userRepository.setAvatarByDeviceId(getBytes(1), userId);
+    }
+
+    // PUT all update
+
+    @RequestMapping(method=RequestMethod.POST) // new and create
+    public int saveUser(User user, BindingResult result)
+    {
         return 0;
     }
 
