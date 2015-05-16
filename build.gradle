@@ -70,7 +70,7 @@ ext.tomcatWebapps = tomcatHome + '/webapps'
 ant.condition(property: "os", value: "windows") { os(family: "windows") }
 ant.condition(property: "os", value: "unix"   ) { os(family: "unix")    }
 
-task checkTomcatPath << {
+task checkTomcat << {
     if (tomcatHome == null)
         throw new RuntimeException("Could not get TOMCAT home, please set CATALINA_HOME env virable first!")
     switch(ant.properties.os){
@@ -85,6 +85,9 @@ task checkTomcatPath << {
             tomcatStop += '.sh'
             break
     }
+    println "Using CATALINA_HOME: ${tomcatHome}"
+    println "Using Tomcat start cmd: ${tomcatStart}"
+    println "Using Tomcat stop cmd: ${tomcatStop}"
 }
 
 task deployLocal << {
@@ -98,7 +101,7 @@ task deployLocal << {
     startTomcat.execute()
 }
 
-deployLocal.dependsOn checkTomcatPath
+deployLocal.dependsOn checkTomcat
 
 task startTomcat << {
     exec {
@@ -115,7 +118,7 @@ task startTomcat << {
     println 'Done.'
 }
 
-startTomcat.dependsOn checkTomcatPath
+startTomcat.dependsOn checkTomcat
 
 task stopTomcat << {
     exec {
@@ -132,5 +135,5 @@ task stopTomcat << {
     println 'Done.'
 }
 
-stopTomcat.dependsOn checkTomcatPath
+stopTomcat.dependsOn checkTomcat
 

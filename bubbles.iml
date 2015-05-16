@@ -9,7 +9,7 @@
         </fileset>
       </configuration>
     </facet>
-    <facet type="web" name="Web Gradle : bubbles-0.0.1-SNAPSHOT.war">
+    <facet type="web" name="Web Gradle : bubbles.war">
       <configuration>
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
