@@ -1,6 +1,6 @@
 CREATE TABLE
 IF NOT EXISTS user (
-	id BIGINT NOT NULL,
+	id BIGINT NOT NULL AUTO_INCREMENT,
 	device_id VARCHAR (64) NOT NULL,
 	cellphone CHAR (11),
 	nickname VARCHAR (32) NOT NULL,
@@ -12,7 +12,8 @@ IF NOT EXISTS user (
 	get_reply_num INT NULL,
 	get_up_num INT NULL,
 	give_up_num INT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  KEY `device_id_idx` (`device_id`)
 );
 
 DELETE FROM `bubbles`.`user` WHERE `id`='10000' OR `id`='10001';

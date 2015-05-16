@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String deviceId;
@@ -124,7 +124,7 @@ public class User {
     @Override
     public String toString() {
         return String.format(
-                "User[deviceid=%s, phonenum=%s, score=%d",
-                deviceId, cellphone, score);
+                "User[id=%d deviceid=%s, phonenum=%s, score=%d",
+                id, deviceId, cellphone, score);
     }
 }
