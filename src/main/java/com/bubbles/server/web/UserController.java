@@ -50,9 +50,14 @@ public class UserController {
     // PUT all update
 
     @RequestMapping(method=RequestMethod.POST) // new and create
-    public int saveUser(User user, BindingResult result)
+    public long saveUser(@ModelAttribute("user") User user, BindingResult result)
     {
-        return 0;
+        if (result.hasErrors()) {
+            logger.error("Binding error");
+            return 0;
+        }
+        User userSaved = userRepository.save(user);
+        return userSaved.getId();
     }
 
     private static byte[] getBytes(int data)
