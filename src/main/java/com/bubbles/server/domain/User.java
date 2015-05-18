@@ -127,4 +127,5 @@ public class User {
                 "User[id=%d deviceid=%s, phonenum=%s, score=%d",
                 id, deviceId, cellphone, score);
     }
+
 }

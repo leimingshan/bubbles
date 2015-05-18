@@ -40,7 +40,7 @@ public class UserRepositoryTest {
 
     @Test
     public void getUser() throws Exception {
-        this.mockMvc.perform(get("/users/10000")
+        this.mockMvc.perform(get("/users-rest/10000")
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))

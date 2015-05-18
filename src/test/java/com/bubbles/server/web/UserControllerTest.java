@@ -38,7 +38,7 @@ public class UserControllerTest {
 
     @Test
     public void testUser() throws Exception {
-        String jsonString = this.mockMvc.perform(get("/user/deviceId/000000000000000")
+        String jsonString = this.mockMvc.perform(get("/users/search/deviceId/000000000000000")
                 .characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();

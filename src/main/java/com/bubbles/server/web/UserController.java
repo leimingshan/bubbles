@@ -14,7 +14,7 @@ import java.util.List;
  * Created by LMSH on 2015/5/11.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -22,13 +22,13 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value="/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public User user(@PathVariable long userId) {
         User user = userRepository.findOne(userId);
         return user;
     }
 
-    @RequestMapping(value="/deviceId/{deviceId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/deviceId/{deviceId}", method = RequestMethod.GET)
     public User userByDeviceId(@PathVariable String deviceId) {
         List<User> userList = userRepository.findByDeviceId(deviceId);
         if (userList.size() != 1) {
@@ -38,18 +38,18 @@ public class UserController {
         return userList.get(0);
     }
 
-    @RequestMapping(value="/{userId}/avatar", method=RequestMethod.PATCH)  // Partially update
+    @RequestMapping(value = "/{userId}/avatar", method = {RequestMethod.PATCH, RequestMethod.PUT})  // Partially update
     public int uploadAvatar(@PathVariable long userId, @RequestParam("avatar") byte[] avatar)
     {
         if (!userRepository.exists(userId)) {
             return 0;
         }
-        return userRepository.setAvatarByDeviceId(getBytes(1), userId);
+        return userRepository.setAvatarByDeviceId(avatar, userId);
     }
 
-    // PUT all update
+    // PUT update a resource -- all update
 
-    @RequestMapping(method=RequestMethod.POST) // new and create
+    @RequestMapping(method=RequestMethod.POST) // create a new resource in collection
     public long saveUser(@ModelAttribute("user") User user, BindingResult result)
     {
         if (result.hasErrors()) {

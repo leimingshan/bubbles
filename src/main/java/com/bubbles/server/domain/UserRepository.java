@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by LMSH on 2015/5/12.
  */
-@RepositoryRestResource(collectionResourceRel = "user")
+@RepositoryRestResource(collectionResourceRel = "user", path="users-rest")
 public interface UserRepository extends CrudRepository<User, Long> {
 
     List<User> findByDeviceId(String deviceId);
