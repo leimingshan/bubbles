@@ -40,6 +40,7 @@ public class UserRepositoryTest {
 
     @Test
     public void getUser() throws Exception {
+        // test spring-data-rest
         this.mockMvc.perform(get("/users-rest/10000")
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())

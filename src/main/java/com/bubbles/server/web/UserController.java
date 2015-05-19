@@ -2,6 +2,7 @@ package com.bubbles.server.web;
 
 import com.bubbles.server.domain.User;
 import com.bubbles.server.domain.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -39,15 +40,52 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{userId}/avatar", method = {RequestMethod.PATCH, RequestMethod.PUT})  // Partially update
-    public int uploadAvatar(@PathVariable long userId, @RequestParam("avatar") byte[] avatar)
+    public int uploadAvatar(@PathVariable long userId, @RequestParam("avatar") String avatarBase64String)
     {
         if (!userRepository.exists(userId)) {
             return 0;
         }
-        return userRepository.setAvatarByDeviceId(avatar, userId);
+        // byte[] is encoded to BASE64 String in http transition
+        // decode the String first
+        ObjectMapper mapper = new ObjectMapper();
+        byte[] avatar = mapper.convertValue(avatarBase64String, byte[].class);
+        return userRepository.setAvatarById(userId, avatar);
     }
 
-    // PUT update a resource -- all update
+    @RequestMapping(value = "/{userId}/score", method = {RequestMethod.PATCH, RequestMethod.PUT})  // Partially update
+    public int updateScore(@PathVariable long userId, @RequestParam("score") int score)
+    {
+        if (!userRepository.exists(userId)) {
+            return 0;
+        }
+        return userRepository.setScoreById(userId, score);
+    }
+
+    @RequestMapping(value = "/{userId}/nickname", method = {RequestMethod.PATCH, RequestMethod.PUT})  // Partially update
+    public int updateNickname(@PathVariable long userId, @RequestParam("nickname") String nickname)
+    {
+        if (!userRepository.exists(userId)) {
+            return 0;
+        }
+        if (nickname.length() > 32) {
+            return 0;
+        }
+        return userRepository.setNicknameById(userId, nickname);
+    }
+
+    @RequestMapping(value = "/{userId}/gender", method = {RequestMethod.PATCH, RequestMethod.PUT})  // Partially update
+    public int updateGender(@PathVariable long userId, @RequestParam("gender") String gender)
+    {
+        if (!userRepository.exists(userId)) {
+            return 0;
+        }
+        if (gender.length() != 1) {
+            return 0;
+        }
+        return userRepository.setGenderById(userId, gender);
+    }
+
+    // HTTP method PUT update a resource -- all update
 
     @RequestMapping(method=RequestMethod.POST) // create a new resource in collection
     public long saveUser(@ModelAttribute("user") User user, BindingResult result)

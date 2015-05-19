@@ -37,12 +37,14 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testUser() throws Exception {
+    public void testUserByDeviceId() throws Exception {
         String jsonString = this.mockMvc.perform(get("/users/search/deviceId/000000000000000")
                 .characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
 
+        // jsonString is User object in json format
+        // convert jsonString back to User and check user fields
         ObjectMapper mapper = new ObjectMapper();
         User user = mapper.readValue(jsonString, User.class);
         assertEquals(user.getDeviceId(), "000000000000000");
