@@ -1,21 +1,33 @@
 package com.bubbles.server.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created by LMSH on 2015/5/11.
  */
 @Entity
+@Cacheable
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotNull
+    @Size(max = 64)
     private String deviceId;
 
     private String cellphone;
+
+    @NotNull
+    @Size(max = 32)
     private String nickname;
+
+    @NotNull
+    @Size(max = 1)
     private String gender;
+
     private byte[] avatar;
 
     private int score;

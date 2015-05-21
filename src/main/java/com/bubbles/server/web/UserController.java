@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by LMSH on 2015/5/11.
@@ -22,6 +26,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private Validator validator;
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public User user(@PathVariable long userId) {
@@ -82,16 +89,19 @@ public class UserController {
         if (gender.length() != 1) {
             return 0;
         }
+        Set<ConstraintViolation<User>> set = validator.validateValue(User.class, "gender", gender);
         return userRepository.setGenderById(userId, gender);
     }
 
     // HTTP method PUT update a resource -- all update
 
     @RequestMapping(method=RequestMethod.POST) // create a new resource in collection
-    public long saveUser(@ModelAttribute("user") User user, BindingResult result)
+    public long saveUser(@Valid @ModelAttribute("user") User user, BindingResult result)
     {
         if (result.hasErrors()) {
-            logger.error("Binding error");
+            //logger.error("Binding error");
+            if (validator == null)
+                logger.error("yyy");
             return 0;
         }
         User userSaved = userRepository.save(user);
