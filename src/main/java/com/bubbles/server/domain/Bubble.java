@@ -13,6 +13,8 @@ public class Bubble {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private long parentId;
+
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User user;
@@ -36,6 +38,14 @@ public class Bubble {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
     }
 
     public User getUser() {
