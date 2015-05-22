@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
- * Created by Fei on 5/16/2015.
+ * Created by LMSH on 5/16/2015.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)
@@ -25,6 +25,7 @@ public class JpaTest {
     @Test
     public void save(){
         EntityManager em = factory.createEntityManager();
+
         User user = new User();
         user.setDeviceId("000000000000005");
         user.setCellphone("18910334672");

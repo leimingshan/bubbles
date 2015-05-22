@@ -47,8 +47,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{userId}/avatar", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
-    public int uploadAvatar(@PathVariable long userId, @RequestParam("avatar") String avatarBase64String)
-    {
+    public int uploadAvatar(@PathVariable long userId, @RequestParam("avatar") String avatarBase64String) {
         if (!userRepository.exists(userId)) {
             return 0;
         }
@@ -60,17 +59,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{userId}/score", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
-    public int updateScore(@PathVariable long userId, @RequestParam("score") int score)
-    {
+    public int updateScore(@PathVariable long userId, @RequestParam("score") int score) {
         if (!userRepository.exists(userId)) {
             return 0;
         }
         return userRepository.setScoreById(userId, score);
     }
 
-    @RequestMapping(value = "/{userId}/nickname", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
-    public int updateNickname(@PathVariable long userId, @RequestParam("nickname") String nickname)
-    {
+    @RequestMapping(value = "/{userId}/nickname", method = {RequestMethod.PATCH, RequestMethod.POST})
+    public int updateNickname(@PathVariable long userId, @RequestParam("nickname") String nickname) {
         if (!userRepository.exists(userId)) {
             return 0;
         }
@@ -81,23 +78,21 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{userId}/gender", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
-    public int updateGender(@PathVariable long userId, @RequestParam("gender") String gender)
-    {
+    public int updateGender(@PathVariable long userId, @RequestParam("gender") String gender) {
         if (!userRepository.exists(userId)) {
             return 0;
         }
         if (gender.length() != 1) {
             return 0;
         }
-        Set<ConstraintViolation<User>> set = validator.validateValue(User.class, "gender", gender);
+        // Set<ConstraintViolation<User>> set = validator.validateValue(User.class, "gender", gender);
         return userRepository.setGenderById(userId, gender);
     }
 
     // HTTP method PUT update a resource -- all update
 
-    @RequestMapping(method=RequestMethod.POST) // create a new resource in collection
-    public long saveUser(@Valid @ModelAttribute("user") User user, BindingResult result)
-    {
+    @RequestMapping(method = RequestMethod.POST) // create a new resource in collection
+    public long saveUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
         if (result.hasErrors()) {
             //logger.error("Binding error");
             if (validator == null)
@@ -106,16 +101,6 @@ public class UserController {
         }
         User userSaved = userRepository.save(user);
         return userSaved.getId();
-    }
-
-    private static byte[] getBytes(int data)
-    {
-        byte[] bytes = new byte[4];
-        bytes[0] = (byte) (data & 0xff);
-        bytes[1] = (byte) ((data & 0xff00) >> 8);
-        bytes[2] = (byte) ((data & 0xff0000) >> 16);
-        bytes[3] = (byte) ((data & 0xff000000) >> 24);
-        return bytes;
     }
 
 }

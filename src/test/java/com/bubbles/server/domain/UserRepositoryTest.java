@@ -18,6 +18,8 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by LMSH on 2015/5/12.
  */
@@ -31,6 +33,9 @@ public class UserRepositoryTest {
     @Autowired
     private WebApplicationContext wac;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private MockMvc mockMvc;
 
     @Before
@@ -39,7 +44,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void getUser() throws Exception {
+    public void testUserResr() throws Exception {
         // test spring-data-rest
         this.mockMvc.perform(get("/users-rest/10000")
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
@@ -48,4 +53,24 @@ public class UserRepositoryTest {
                 .andExpect(jsonPath("$.gender").value("m"));
     }
 
+    @Test
+    public void testSetScore() {
+        userRepository.setScoreById(10000L, 500);
+        User user = userRepository.findOne(10000L);
+        assertEquals(500, user.getScore());
+    }
+
+    @Test
+    public void testSetNickname() {
+        userRepository.setNicknameById(10001L, "test-nickname");
+        User user = userRepository.findOne(10001L);
+        assertEquals("test-nickname", user.getNickname());
+    }
+
+    @Test
+    public void testSetGender() {
+        userRepository.setGenderById(10000L, "m");
+        User user = userRepository.findOne(10000L);
+        assertEquals("m", user.getGender());
+    }
 }
