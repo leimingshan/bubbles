@@ -5,7 +5,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Created by LMSH on 2015/5/11.
+ * Entity User, mapped to table user
+ * @author Mingshan Lei
  */
 @Entity
 @Cacheable

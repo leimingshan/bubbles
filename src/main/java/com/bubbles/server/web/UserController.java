@@ -108,14 +108,23 @@ public class UserController {
         return userSaved.getId();
     }
 
-    // bubbles operation
-
-    // search for bubbles of user
+    // bubbles operations below
+    /**
+     * Find all bubbles posted by the user.
+     * @param userId user's id
+     * @return bubble list
+     */
     @RequestMapping(value = "/{userId}/bubbles")
     public List<Bubble> getBubblesByUserId(@PathVariable long userId) {
-        return bubbleRepository.findByUserIdOrderByTimestamp(userId);
+        return bubbleRepository.findByUserIdOrderByTime(userId);
     }
 
+    /**
+     * Save the new bubble posted by the user.
+     * @param userId
+     * @param bubble
+     * @return the saved bubble
+     */
     @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.POST)
     public Bubble saveBubble(@PathVariable long userId, @ModelAttribute("bubble") Bubble bubble) {
         User user = userRepository.findOne(userId);
