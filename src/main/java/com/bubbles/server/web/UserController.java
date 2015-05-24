@@ -1,5 +1,7 @@
 package com.bubbles.server.web;
 
+import com.bubbles.server.domain.Bubble;
+import com.bubbles.server.domain.BubbleRepository;
 import com.bubbles.server.domain.User;
 import com.bubbles.server.domain.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,16 +30,19 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
+    private BubbleRepository bubbleRepository;
+
+    @Autowired
     private Validator validator;
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public User user(@PathVariable long userId) {
+    public User getUser(@PathVariable long userId) {
         User user = userRepository.findOne(userId);
         return user;
     }
 
     @RequestMapping(value = "/search/deviceId/{deviceId}", method = RequestMethod.GET)
-    public User userByDeviceId(@PathVariable String deviceId) {
+    public User getUserByDeviceId(@PathVariable String deviceId) {
         List<User> userList = userRepository.findByDeviceId(deviceId);
         if (userList.size() != 1) {
             logger.error("ERROR: Get more than one user by deviceId");
@@ -101,6 +106,21 @@ public class UserController {
         }
         User userSaved = userRepository.save(user);
         return userSaved.getId();
+    }
+
+    // bubbles operation
+
+    // search for bubbles of user
+    @RequestMapping(value = "/{userId}/bubbles")
+    public List<Bubble> getBubblesByUserId(@PathVariable long userId) {
+        return bubbleRepository.findByUserIdOrderByTimestamp(userId);
+    }
+
+    @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.POST)
+    public Bubble saveBubble(@PathVariable long userId, @ModelAttribute("bubble") Bubble bubble) {
+        User user = userRepository.findOne(userId);
+        bubble.setUser(user);
+        return bubbleRepository.save(bubble);
     }
 
 }

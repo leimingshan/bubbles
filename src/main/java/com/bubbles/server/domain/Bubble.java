@@ -1,5 +1,7 @@
 package com.bubbles.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,14 +10,15 @@ import java.util.Date;
  */
 @Entity
 @Cacheable
+@JsonIgnoreProperties({"parentBubble"})
 public class Bubble {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long parentId;
+    private Long parentId; // may be null; null represents main bubble, else reply
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private User user;
 
@@ -40,11 +43,11 @@ public class Bubble {
         this.id = id;
     }
 
-    public long getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(long parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
@@ -119,4 +122,5 @@ public class Bubble {
     public void setDistance(int distance) {
         this.distance = distance;
     }
+
 }
