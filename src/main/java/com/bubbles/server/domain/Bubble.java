@@ -6,7 +6,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by LMSH on 2015/5/21.
+ * Entity Bubble, mapped to table bubble.
+ * @author Mingshan Lei
  */
 @Entity
 @Cacheable
@@ -17,6 +18,7 @@ public class Bubble {
     private long id;
 
     private Long parentId; // may be null; null represents main bubble, else reply
+    private Long parentBubbleId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
@@ -49,6 +51,14 @@ public class Bubble {
 
     public void setParentId(Long parentId) {
         this.parentId = parentId;
+    }
+
+    public Long getParentBubbleId() {
+        return parentBubbleId;
+    }
+
+    public void setParentBubbleId(Long parentBubbleId) {
+        this.parentBubbleId = parentBubbleId;
     }
 
     public User getUser() {
