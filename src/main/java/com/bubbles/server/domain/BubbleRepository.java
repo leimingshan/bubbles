@@ -9,16 +9,35 @@ import javax.persistence.QueryHint;
 import java.util.List;
 
 /**
- * Created by LMSH on 2015/5/21.
+ * Interface using spring-data-jpa for bubbles CRUD operation.
+ *
+ * @author Mingshan Lei
  */
 @RepositoryRestResource(collectionResourceRel = "bubble", path = "bubbles-rest")
 public interface BubbleRepository extends CrudRepository<Bubble, Long> {
 
+    /**
+     * Find user's all bubbles by user's id.
+     * @param userId user's id
+     * @return bubble list
+     */
     List<Bubble> findByUserId(long userId);
 
-    @Query("from Bubble b where b.user.id=?1 order by b.timestamp")
-    @QueryHints({ @QueryHint(name = "org.hibernate.cacheable", value ="true") })
-    List<Bubble> findByUserIdOrderByTimestamp(long userId);
+    /**
+     * Find user's bubbles by user's id and order by timestamp.
+     * @param userId user's id
+     * @return bubble list
+     */
+    @Query("from Bubble b where b.user.id=?1 order by b.timestamp desc")
+    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
+    List<Bubble> findByUserIdOrderByTime(long userId);
 
-    List<Bubble> findByParentId(Long parentId);
+    /**
+     * Find the bubble's all replies by bubble's id.
+     * @param parentId
+     * @return bubble list
+     */
+    @Query("from Bubble b where b.parentBubbleId=?1 order by b.timestamp desc")
+    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
+    List<Bubble> findRepliesByBubbleIdOrderByTime(Long bubbleId);
 }

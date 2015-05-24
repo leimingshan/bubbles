@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * Created by LMSH on 2015/5/21.
  */
@@ -25,4 +27,10 @@ public class BubbleController {
     public Bubble getBubbleById(@PathVariable long bubbleId) {
         return bubbleRepository.findOne(bubbleId);
     }
+
+    @RequestMapping(value = "/{bubbleId}/replies", method = RequestMethod.GET)
+    public List<Bubble> getRepliesByBubbleId(@PathVariable long bubbleId) {
+        return bubbleRepository.findRepliesByBubbleIdOrderByTime(bubbleId);
+    }
+
 }
