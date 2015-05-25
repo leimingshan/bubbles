@@ -12,7 +12,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
- * Created by LMSH on 5/16/2015.
+ *
+ * @author Mingshan Lei
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)
@@ -23,7 +24,7 @@ public class JpaTest {
     private EntityManagerFactory factory;
 
     @Test
-    public void save(){
+    public void save() {
         EntityManager em = factory.createEntityManager();
 
         User user = new User();
