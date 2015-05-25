@@ -16,10 +16,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 /**
- * Created by LMSH on 2015/5/12.
+ * User controller test.
+ * @author Mingshan Lei
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)
@@ -43,10 +45,11 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
 
-        // jsonString is User object in json format
-        // convert jsonString back to User and check user fields
+        // jsonString is one User object in json format
+        // convert jsonString back to User and check user field values
         ObjectMapper mapper = new ObjectMapper();
         User user = mapper.readValue(jsonString, User.class);
+        assertNotNull(user);
         assertEquals(user.getDeviceId(), "000000000000000");
     }
 }

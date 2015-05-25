@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Created by LMSH on 2015/5/12.
+ * Interface using spring-data-jpa for uses CRUD operation
+ * @author Mingshan Lei
  */
 @RepositoryRestResource(collectionResourceRel = "user", path="users-rest")
 public interface UserRepository extends CrudRepository<User, Long> {

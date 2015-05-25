@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Created by LMSH on 2015/5/21.
+ * Rest controller for bubbles resources.
+ *
+ * @author Mingshan Lei
+ * @since 2015/5/21
  */
 @RestController
 @RequestMapping("/bubbles")

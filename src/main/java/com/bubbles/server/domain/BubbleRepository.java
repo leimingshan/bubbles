@@ -18,6 +18,7 @@ public interface BubbleRepository extends CrudRepository<Bubble, Long> {
 
     /**
      * Find user's all bubbles by user's id.
+     *
      * @param userId user's id
      * @return bubble list
      */
@@ -25,6 +26,7 @@ public interface BubbleRepository extends CrudRepository<Bubble, Long> {
 
     /**
      * Find user's bubbles by user's id and order by timestamp.
+     *
      * @param userId user's id
      * @return bubble list
      */
@@ -34,7 +36,8 @@ public interface BubbleRepository extends CrudRepository<Bubble, Long> {
 
     /**
      * Find the bubble's all replies by bubble's id.
-     * @param parentId
+     *
+     * @param bubbleId the bubble's id
      * @return bubble list
      */
     @Query("from Bubble b where b.parentBubbleId=?1 order by b.timestamp desc")

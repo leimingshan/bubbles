@@ -22,6 +22,7 @@ public class BubblesApplicationTests {
 	@Test
 	public void contextLoads() {
 		assertNotNull(this.ctx);
+        // test the spring context and beans
 		assertTrue(this.ctx.containsBean("userController"));
 		assertTrue(this.ctx.containsBean("userRepository"));
 	}

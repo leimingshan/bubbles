@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * Entity Bubble, mapped to table bubble.
+ *
  * @author Mingshan Lei
  */
 @Entity
@@ -17,9 +18,20 @@ public class Bubble {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private Long parentId; // may be null; null represents main bubble, else reply
+    /**
+     * The direct parent id of this bubble or reply.
+     * The value may be null; null represents main bubble, else represents reply.
+     */
+    private Long parentId;
+
+    /**
+     * The bubble which contains this object.
+     */
     private Long parentBubbleId;
 
+    /**
+     * The author object.
+     */
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private User user;

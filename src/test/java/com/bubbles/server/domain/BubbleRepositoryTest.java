@@ -13,7 +13,8 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by LMSH on 2015/5/22.
+ *
+ * @author Mingshan Lei
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)

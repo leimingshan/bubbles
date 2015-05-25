@@ -4,33 +4,38 @@ import com.bubbles.server.domain.Bubble;
 import com.bubbles.server.domain.BubbleRepository;
 import com.bubbles.server.domain.User;
 import com.bubbles.server.domain.UserRepository;
+import com.bubbles.server.service.ImageFileService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import java.util.List;
-import java.util.Set;
 
 /**
- * Created by LMSH on 2015/5/11.
+ * Rest controller for users resources.
+ *
+ * @author Mingshan Lei
+ * @since 2015/5/11
  */
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    Logger logger = LoggerFactory.getLogger(UserController.class);
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private BubbleRepository bubbleRepository;
+
+    @Autowired
+    private ImageFileService imageFileService;
 
     @Autowired
     private Validator validator;
@@ -94,8 +99,14 @@ public class UserController {
         return userRepository.setGenderById(userId, gender);
     }
 
+
     // HTTP method PUT update a resource -- all update
 
+    /**
+     * @param user   user object generated from request params
+     * @param result binding user object result
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST) // create a new resource in collection
     public long saveUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
         if (result.hasErrors()) {
@@ -109,8 +120,10 @@ public class UserController {
     }
 
     // bubbles operations below
+
     /**
      * Find all bubbles posted by the user.
+     *
      * @param userId user's id
      * @return bubble list
      */
@@ -121,6 +134,7 @@ public class UserController {
 
     /**
      * Save the new bubble posted by the user.
+     *
      * @param userId
      * @param bubble
      * @return the saved bubble
