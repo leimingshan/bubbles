@@ -23,7 +23,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query("select u.avatarUrl from User u where u.id = ?1")
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
-    String findAvatarUrl(long userId);
+    String findAvatarUrlById(long userId);
 
     @Modifying
     @Transactional(timeout = 5)

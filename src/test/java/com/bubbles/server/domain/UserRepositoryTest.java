@@ -29,11 +29,27 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindByDeviceId() {
-        List<User> userList = userRepository.findByDeviceId("12266552212");
+        List<User> userList = userRepository.findByDeviceId("000000000010000");
         // should only have one user in userList
         assertNotNull(userList);
         assertEquals(1, userList.size());
         assertEquals(10000, userList.get(0).getId());
+    }
+
+    @Test
+    public void testFindAvatarUrlById() {
+        String url = userRepository.findAvatarUrlById(10000L);
+        assertNotNull(url);
+        assertEquals(url, "http://112.124.56.38/avatar/10000.jpg");
+    }
+
+    @Test
+    public void testSetAvatarUrlById() {
+        String url = "http://112.124.56.38/avatar/11000.jpg";
+        userRepository.setAvatarUrlById(10001L, url);
+        User user = userRepository.findOne(10001L);
+        assertNotNull(user);
+        assertEquals(url, user.getAvatarUrl());
     }
 
     @Test

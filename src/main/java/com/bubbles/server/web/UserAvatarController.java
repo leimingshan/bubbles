@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 /**
  * Controller for uploading and downloading avatars.
  *
@@ -32,7 +30,7 @@ public class UserAvatarController {
      */
     @RequestMapping(value = "/{userId}/avatar", method = RequestMethod.GET)
     public String getUserAvatar(@PathVariable long userId) {
-        String url = userRepository.findAvatarUrl(userId);
+        String url = userRepository.findAvatarUrlById(userId);
         return "redirect:" + url;
     }
 
