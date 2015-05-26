@@ -5,12 +5,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  *
@@ -19,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)
 @Transactional
+@Sql("/test-user-data.sql")
 public class BubbleRepositoryTest {
 
     @Autowired
@@ -27,6 +30,7 @@ public class BubbleRepositoryTest {
     @Test
     public void testFindByUserId() {
         List<Bubble> bubbleList = bubbleRepository.findByUserId(1);
-        assertEquals(bubbleList.size(), 1);
+        assertNotNull(bubbleList);
+        assertEquals(2, bubbleList.size());
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
  * Interface using spring-data-jpa for bubbles CRUD operation.
  *
  * @author Mingshan Lei
+ * @since 2015/5/21
  */
 @RepositoryRestResource(collectionResourceRel = "bubble", path = "bubbles-rest")
 public interface BubbleRepository extends CrudRepository<Bubble, Long> {

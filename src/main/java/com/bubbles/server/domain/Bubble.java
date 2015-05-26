@@ -9,6 +9,7 @@ import java.util.Date;
  * Entity Bubble, mapped to table bubble.
  *
  * @author Mingshan Lei
+ * @since 2015/5/21
  */
 @Entity
 @Cacheable
