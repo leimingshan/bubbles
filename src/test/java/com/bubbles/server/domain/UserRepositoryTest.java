@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)
 @Transactional
-@Sql("/test-user-data.sql")
+@Sql({"/test-schema.sql", "/test-user-data.sql"})
 public class UserRepositoryTest {
 
     @Autowired
