@@ -6,7 +6,9 @@ import javax.validation.constraints.Size;
 
 /**
  * Entity User, mapped to table user
+ *
  * @author Mingshan Lei
+ * @since 2015/5/11
  */
 @Entity
 @Cacheable
@@ -29,7 +31,7 @@ public class User {
     @Size(max = 1)
     private String gender;
 
-    private byte[] avatar;
+    private String avatarUrl;
 
     private int score;
     private int pubNum;
@@ -78,12 +80,12 @@ public class User {
         this.gender = gender;
     }
 
-    public byte[] getAvatar() {
-        return avatar;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setAvatar(byte[] avatar) {
-        this.avatar = avatar;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
     public int getScore() {

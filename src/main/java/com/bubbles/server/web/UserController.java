@@ -56,17 +56,6 @@ public class UserController {
         return userList.get(0);
     }
 
-    @RequestMapping(value = "/{userId}/avatar", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
-    public int uploadAvatar(@PathVariable long userId, @RequestParam("avatar") String avatarBase64String) {
-        if (!userRepository.exists(userId)) {
-            return 0;
-        }
-        // byte[] is encoded to BASE64 String in http transition
-        // decode the String first
-        ObjectMapper mapper = new ObjectMapper();
-        byte[] avatar = mapper.convertValue(avatarBase64String, byte[].class);
-        return userRepository.setAvatarById(userId, avatar);
-    }
 
     @RequestMapping(value = "/{userId}/score", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
     public int updateScore(@PathVariable long userId, @RequestParam("score") int score) {

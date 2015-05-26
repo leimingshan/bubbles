@@ -1,18 +1,51 @@
 package com.bubbles.server.web;
 
+import com.bubbles.server.domain.UserRepository;
+import com.bubbles.server.service.ImageFileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
- * Created by LMSH on 2015/5/25.
+ * Controller for uploading and downloading avatars.
+ *
+ * @author Mingshan Lei
+ * @since 2015/5/25
  */
 @Controller
 @RequestMapping("/users")
 public class UserAvatarController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ImageFileService imageFileService;
+
+    /**
+     * Get the user's avatar image file.
+     * @param userId user's id
+     * @return redirect to the http server to get the corresponding img file
+     */
     @RequestMapping(value = "/{userId}/avatar", method = RequestMethod.GET)
     public String getUserAvatar(@PathVariable long userId) {
-        return "redirect:http://112.124.56.38/avatar/123.jpg";
+        String url = userRepository.findAvatarUrl(userId);
+        return "redirect:" + url;
+    }
+
+
+    @RequestMapping(value = "/{userId}/avatar", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
+    public @ResponseBody int uploadAvatar(@PathVariable long userId, @RequestParam("avatar") MultipartFile file) {
+        if (!userRepository.exists(userId)) {
+            return 0;
+        }
+        String fileName = userId + ".jpg";
+        // save upload file to the specific location using filename
+        String avatarUrl = imageFileService.saveImgFile(file, fileName);
+
+        return userRepository.setAvatarUrlById(userId, avatarUrl);
     }
 }
