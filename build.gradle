@@ -98,8 +98,8 @@ task deployLocal << {
         into "${tomcatWebapps}"
         include '*.war'
     }
-    println "start tomcat !"
-    startTomcat.execute()
+    //println "start tomcat !"
+    //startTomcat.execute()
 }
 
 deployLocal.dependsOn checkTomcat
