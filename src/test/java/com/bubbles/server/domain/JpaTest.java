@@ -11,9 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
+ * Test for use of JPA and JPA context
  *
  * @author Mingshan Lei
+ * @since 2015/5/16
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)
@@ -23,8 +28,11 @@ public class JpaTest {
     @Autowired
     private EntityManagerFactory factory;
 
+    /**
+     * Test save method using JPA entity manager
+     */
     @Test
-    public void save() {
+    public void testSave() {
         EntityManager em = factory.createEntityManager();
 
         User user = new User();
@@ -33,7 +41,10 @@ public class JpaTest {
         user.setNickname("helloiam");
         user.setGender("f");
 
-        em.merge(user);
+        User userSaved = em.merge(user);
+        assertNotNull(userSaved);
+        assertEquals("helloiam", userSaved.getNickname());
+
         em.close();
     }
 }
