@@ -4,17 +4,18 @@ import com.bubbles.server.domain.Bubble;
 import com.bubbles.server.domain.BubbleRepository;
 import com.bubbles.server.domain.User;
 import com.bubbles.server.domain.UserRepository;
-import com.bubbles.server.service.ImageFileService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.bubbles.server.web.viewmodel.InvalidRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.*;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Rest controller for users resources.
@@ -33,9 +34,6 @@ public class UserController {
 
     @Autowired
     private BubbleRepository bubbleRepository;
-
-    @Autowired
-    private ImageFileService imageFileService;
 
     @Autowired
     private Validator validator;
@@ -79,12 +77,14 @@ public class UserController {
     @RequestMapping(value = "/{userId}/gender", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
     public int updateGender(@PathVariable long userId, @RequestParam("gender") String gender) {
         if (!userRepository.exists(userId)) {
-            return 0;
+            throw new InvalidRequestException("No User found for id " + userId, null);
         }
-        if (gender.length() != 1) {
-            return 0;
+
+        Set<ConstraintViolation<User>> set = validator.validateValue(User.class, "gender", gender);
+        BindingResult result = convertToErrors(set);
+        if (result.hasErrors()) {
+            throw new InvalidRequestException("Invalid User Entity", result);
         }
-        // Set<ConstraintViolation<User>> set = validator.validateValue(User.class, "gender", gender);
         return userRepository.setGenderById(userId, gender);
     }
 
@@ -99,10 +99,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST) // create a new resource in collection
     public long saveUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
         if (result.hasErrors()) {
-            //logger.error("Binding error");
-            if (validator == null)
-                logger.error("yyy");
-            return 0;
+            throw new InvalidRequestException("Invalid User Entity", result);
         }
         User userSaved = userRepository.save(user);
         return userSaved.getId();
@@ -133,6 +130,16 @@ public class UserController {
         User user = userRepository.findOne(userId);
         bubble.setUser(user);
         return bubbleRepository.save(bubble);
+    }
+
+    private BindingResult convertToErrors(Set<ConstraintViolation<User>> violationSet)
+    {
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new User(), "User");
+        for (ConstraintViolation violation : violationSet) {
+            FieldError fieldError = new FieldError("User", violation.getPropertyPath().toString(), violation.getMessage());
+            bindingResult.addError(fieldError);
+        }
+        return bindingResult;
     }
 
 }
