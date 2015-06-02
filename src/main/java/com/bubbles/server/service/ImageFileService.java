@@ -57,7 +57,7 @@ public class ImageFileService {
         }
     }
 
-    public String getBasePath() {
+    public static String getBasePath() {
         return basePath;
     }
 
@@ -68,7 +68,7 @@ public class ImageFileService {
     /**
      * Try to save image to disk and generate http url.
      *
-     * @param file           uploaded file from spring mvc
+     * @param file uploaded file from spring mvc
      * @param outputFileName saved file name
      * @return url path for getting the file
      */
