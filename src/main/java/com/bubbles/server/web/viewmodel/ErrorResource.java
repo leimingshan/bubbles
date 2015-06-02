@@ -4,6 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
+/**
+ * Compact Error info stored for display in json format,
+ * which may contain several field error info.
+ *
+ * @author Mingshan Lei
+ * @since 2015/5/29
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ErrorResource {
     private String code;

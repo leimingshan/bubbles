@@ -3,7 +3,7 @@ package com.bubbles.server.web.viewmodel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Object field error resource.
+ * Object field error resource, store field error info of object.
  *
  * @author Mingshan Lei
  * @since 2015/5/29
