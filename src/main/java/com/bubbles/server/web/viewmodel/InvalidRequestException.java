@@ -11,13 +11,10 @@ import org.springframework.validation.Errors;
  */
 public class InvalidRequestException extends AbstractException {
 
-    private static final HttpStatus httpstatus = HttpStatus.UNPROCESSABLE_ENTITY;
-
     public InvalidRequestException(String message, Errors errors) {
         super(message, errors);
+        super.httpstatus = HttpStatus.UNPROCESSABLE_ENTITY;
+        super.code = "InvalidRequest";
     }
 
-    public static HttpStatus getHttpstatus() {
-        return httpstatus;
-    }
 }

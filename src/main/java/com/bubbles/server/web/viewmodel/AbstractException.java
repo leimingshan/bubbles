@@ -11,14 +11,28 @@ import org.springframework.validation.Errors;
  */
 public abstract class AbstractException extends RuntimeException {
 
+    protected HttpStatus httpstatus = HttpStatus.BAD_REQUEST;
+
     protected Errors errors;
+
+    protected String code;
 
     public AbstractException(String message, Errors errors) {
         super(message);
         this.errors = errors;
+
+    }
+
+    public HttpStatus getHttpstatus() {
+        return httpstatus;
     }
 
     public Errors getErrors() {
         return errors;
     }
+
+    public String getCode() {
+        return code;
+    }
+
 }

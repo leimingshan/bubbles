@@ -11,13 +11,10 @@ import org.springframework.validation.Errors;
  */
 public class NoResourceException extends AbstractException {
 
-    private static final HttpStatus httpstatus = HttpStatus.BAD_REQUEST;
-
     public NoResourceException(String message, Errors errors) {
         super(message, errors);
+        super.httpstatus = HttpStatus.NOT_FOUND;
+        super.code = "ResourceNotFound";
     }
 
-    public static HttpStatus getHttpstatus() {
-        return httpstatus;
-    }
 }

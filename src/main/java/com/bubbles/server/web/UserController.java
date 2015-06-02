@@ -5,6 +5,7 @@ import com.bubbles.server.domain.BubbleRepository;
 import com.bubbles.server.domain.User;
 import com.bubbles.server.domain.UserRepository;
 import com.bubbles.server.web.viewmodel.InvalidRequestException;
+import com.bubbles.server.web.viewmodel.NoResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class UserController {
     @RequestMapping(value = "/{userId}/score", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
     public int updateScore(@PathVariable long userId, @RequestParam("score") int score) {
         if (!userRepository.exists(userId)) {
-            return 0;
+            throw new NoResourceException("Invalid User Id " + userId, null);
         }
         return userRepository.setScoreById(userId, score);
     }
@@ -66,7 +67,7 @@ public class UserController {
     @RequestMapping(value = "/{userId}/nickname", method = {RequestMethod.PATCH, RequestMethod.POST})
     public int updateNickname(@PathVariable long userId, @RequestParam("nickname") String nickname) {
         if (!userRepository.exists(userId)) {
-            return 0;
+            throw new NoResourceException("Invalid User Id " + userId, null);
         }
         if (nickname.length() > 32) {
             return 0;
@@ -77,7 +78,7 @@ public class UserController {
     @RequestMapping(value = "/{userId}/gender", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
     public int updateGender(@PathVariable long userId, @RequestParam("gender") String gender) {
         if (!userRepository.exists(userId)) {
-            throw new InvalidRequestException("No User found for id " + userId, null);
+            throw new NoResourceException("Invalid User Id " + userId, null);
         }
 
         Set<ConstraintViolation<User>> set = validator.validateValue(User.class, "gender", gender);
@@ -88,13 +89,14 @@ public class UserController {
         return userRepository.setGenderById(userId, gender);
     }
 
-
     // HTTP method PUT update a resource -- all update
 
     /**
+     * Create the user and save user info.
+     *
      * @param user   user object generated from request params
      * @param result binding user object result
-     * @return
+     * @return id of the saved user
      */
     @RequestMapping(method = RequestMethod.POST) // create a new resource in collection
     public long saveUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
@@ -111,7 +113,7 @@ public class UserController {
      * Find all bubbles posted by the user.
      *
      * @param userId user's id
-     * @return bubble list
+     * @return bubble list. {@code null} if no bubbles found for the user.
      */
     @RequestMapping(value = "/{userId}/bubbles")
     public List<Bubble> getBubblesByUserId(@PathVariable long userId) {
@@ -121,9 +123,9 @@ public class UserController {
     /**
      * Save the new bubble posted by the user.
      *
-     * @param userId
-     * @param bubble
-     * @return the saved bubble
+     * @param userId the user's id who posted the bubble
+     * @param bubble converted bubble object from model attribute
+     * @return the saved bubble object
      */
     @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.POST)
     public Bubble saveBubble(@PathVariable long userId, @ModelAttribute("bubble") Bubble bubble) {
@@ -132,6 +134,12 @@ public class UserController {
         return bubbleRepository.save(bubble);
     }
 
+    /**
+     * Convert usual validate constraint violation to spring binding result.
+     *
+     * @param violationSet validated violation to be converted
+     * @return spring binding result that could be used in exception
+     */
     private BindingResult convertToErrors(Set<ConstraintViolation<User>> violationSet)
     {
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new User(), "User");

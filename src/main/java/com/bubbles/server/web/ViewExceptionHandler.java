@@ -3,9 +3,7 @@ package com.bubbles.server.web;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bubbles.server.web.viewmodel.ErrorResource;
-import com.bubbles.server.web.viewmodel.FieldErrorResource;
-import com.bubbles.server.web.viewmodel.InvalidRequestException;
+import com.bubbles.server.web.viewmodel.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,9 +22,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ViewExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({ InvalidRequestException.class })
+    @ExceptionHandler({ InvalidRequestException.class, NoResourceException.class })
     protected ResponseEntity<Object> handleInvalidRequest(RuntimeException e, WebRequest request) {
-        InvalidRequestException ire = (InvalidRequestException) e;
+        AbstractException ire = (AbstractException) e;
         List<FieldErrorResource> fieldErrorResources = new ArrayList<>();
 
         if (ire.getErrors() != null) {
@@ -41,7 +39,7 @@ public class ViewExceptionHandler extends ResponseEntityExceptionHandler {
             }
         }
 
-        ErrorResource error = new ErrorResource("InvalidRequest", ire.getMessage());
+        ErrorResource error = new ErrorResource(ire.getCode(), ire.getMessage());
         error.setFieldErrors(fieldErrorResources);
 
         HttpHeaders headers = new HttpHeaders();
