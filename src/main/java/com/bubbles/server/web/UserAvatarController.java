@@ -2,6 +2,7 @@ package com.bubbles.server.web;
 
 import com.bubbles.server.domain.UserRepository;
 import com.bubbles.server.service.ImageFileService;
+import com.bubbles.server.web.viewmodel.NoResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +39,11 @@ public class UserAvatarController {
     @RequestMapping(value = "/{userId}/avatar", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
     public @ResponseBody int uploadAvatar(@PathVariable long userId, @RequestParam("avatar") MultipartFile file) {
         if (!userRepository.exists(userId)) {
-            return 0;
+            throw new NoResourceException("Invalid User Id " + userId, null);
         }
         String fileName = userId + ".jpg";
         // save upload file to the specific location using filename
         String avatarUrl = imageFileService.saveImgFile(file, fileName);
-
         return userRepository.setAvatarUrlById(userId, avatarUrl);
     }
 }

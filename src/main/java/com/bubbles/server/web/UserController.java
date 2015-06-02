@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -130,7 +131,12 @@ public class UserController {
     @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.POST)
     public Bubble saveBubble(@PathVariable long userId, @ModelAttribute("bubble") Bubble bubble) {
         User user = userRepository.findOne(userId);
+        if (user == null) {
+            throw new NoResourceException("Invalid User Id " + userId, null);
+        }
         bubble.setUser(user);
+        bubble.setTimestamp(new Date());
+        bubble.setLastReplyTime(new Date());
         return bubbleRepository.save(bubble);
     }
 
