@@ -1,5 +1,6 @@
 package com.bubbles.server.domain;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
@@ -44,4 +45,6 @@ public interface BubbleRepository extends CrudRepository<Bubble, Long> {
     @Query("from Bubble b where b.parentBubbleId=?1 order by b.timestamp desc")
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     List<Bubble> findRepliesByBubbleIdOrderByTime(Long bubbleId);
+
+    List<Bubble> findTop5ByParentBubbleId(Long parentBubbleId, Pageable pageable);
 }

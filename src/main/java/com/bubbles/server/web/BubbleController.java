@@ -5,6 +5,9 @@ import com.bubbles.server.domain.BubbleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,4 +39,9 @@ public class BubbleController {
         return bubbleRepository.findRepliesByBubbleIdOrderByTime(bubbleId);
     }
 
+    @RequestMapping(value = "/{bubbleId}/replies/top", method = RequestMethod.GET)
+    public List<Bubble> getTop5RepliesByBubbleId(@PathVariable long bubbleId,
+                                                 @PageableDefault(page = 0, size = 5, sort = {"score"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return bubbleRepository.findTop5ByParentBubbleId(bubbleId, pageable);
+    }
 }
