@@ -29,7 +29,7 @@ public class BubbleRepositoryTest {
 
     @Test
     public void testFindByUserId() {
-        List<Bubble> bubbleList = bubbleRepository.findByUserId(1);
+        List<Bubble> bubbleList = bubbleRepository.findByUserId(10000);
         assertNotNull(bubbleList);
         assertEquals(2, bubbleList.size());
     }
