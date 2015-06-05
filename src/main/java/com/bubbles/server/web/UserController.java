@@ -29,7 +29,7 @@ import java.util.Set;
 @RequestMapping("/users")
 public class UserController {
 
-    private Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserRepository userRepository;

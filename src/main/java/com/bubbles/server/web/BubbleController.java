@@ -24,7 +24,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/bubbles")
 public class BubbleController {
-    Logger logger = LoggerFactory.getLogger(BubbleController.class);
+    
+    private static final Logger logger = LoggerFactory.getLogger(BubbleController.class);
 
     @Autowired
     private BubbleRepository bubbleRepository;

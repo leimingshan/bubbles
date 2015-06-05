@@ -20,7 +20,7 @@ import java.util.Properties;
 @Service
 public class ImageFileService {
 
-    private Logger logger = LoggerFactory.getLogger(ImageFileService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ImageFileService.class);
 
     /**
      * Base folder location to save uploaded images.
@@ -41,7 +41,7 @@ public class ImageFileService {
         try {
             properties.load(this.getClass().getResourceAsStream("/imglocation.properties"));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("No imglocation.properties found: ", e.getMessage());
         }
         String os = System.getProperty("os.name").toLowerCase();
         if (os.indexOf("linux") >= 0) {
@@ -83,7 +83,7 @@ public class ImageFileService {
         try {
             file.transferTo(new File(basePath + outputFileName));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("File transfer failed: ", e.getMessage());
         }
         return baseUrl + outputFileName;
     }
