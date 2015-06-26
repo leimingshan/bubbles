@@ -96,13 +96,13 @@ public class UserController {
      * Create the user and save user info.
      *
      * @param user   user object generated from request params
-     * @param result binding user object result
+     * @param errors validation result of user model in request body
      * @return id of the saved user
      */
     @RequestMapping(method = RequestMethod.POST) // create a new resource in collection
-    public long saveUser(@Valid @ModelAttribute("user") User user, BindingResult result) {
-        if (result.hasErrors()) {
-            throw new InvalidRequestException("Invalid User Entity", result);
+    public long saveUser(@Valid @RequestBody User user, Errors errors) {
+        if (errors.hasErrors()) {
+            throw new InvalidRequestException("Invalid User Entity", errors);
         }
         User userSaved = userRepository.save(user);
         return userSaved.getId();
@@ -129,7 +129,7 @@ public class UserController {
      * @return the saved bubble object
      */
     @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.POST)
-    public Bubble saveBubble(@PathVariable long userId, @ModelAttribute("bubble") Bubble bubble) {
+    public long saveBubble(@PathVariable long userId, @RequestBody Bubble bubble) {
         User user = userRepository.findOne(userId);
         if (user == null) {
             throw new NoResourceException("Invalid User Id " + userId, null);
@@ -137,7 +137,8 @@ public class UserController {
         bubble.setUser(user);
         bubble.setTimestamp(new Date());
         bubble.setLastReplyTime(new Date());
-        return bubbleRepository.save(bubble);
+        Bubble bubbleSaved = bubbleRepository.save(bubble);
+        return bubbleSaved.getId();
     }
 
     /**
