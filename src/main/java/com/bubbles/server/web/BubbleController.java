@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +24,10 @@ import java.util.List;
 public class BubbleController {
     
     private static final Logger logger = LoggerFactory.getLogger(BubbleController.class);
+
+    private static final int pageSize = 20; // default page size of bubbles results
+
+    private static final int maxDistance = 2000; // 2000 meters for bubbles maximum search radius
 
     @Autowired
     private BubbleRepository bubbleRepository;
@@ -42,7 +44,20 @@ public class BubbleController {
 
     @RequestMapping(value = "/{bubbleId}/replies/top", method = RequestMethod.GET)
     public List<Bubble> getTop5RepliesByBubbleId(@PathVariable long bubbleId,
-                                                 @PageableDefault(page = 0, size = 5, sort = {"score"}, direction = Sort.Direction.DESC) Pageable pageable) {
+                                                 @PageableDefault(page = 0, size = pageSize, sort = {"score"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return bubbleRepository.findTop5ByParentBubbleId(bubbleId, pageable);
     }
+
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Bubble> getBubblesByLocation(@RequestParam("longitude") double longitude,
+                                             @RequestParam("latitude") double latitude,
+                                             @RequestParam("offset") int offset,
+                                             @RequestParam("type") String type) {
+
+        // TODO
+        List<Bubble> bubbleList = new ArrayList<Bubble>();
+        return bubbleList;
+    }
+
 }

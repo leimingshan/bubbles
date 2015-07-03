@@ -4,12 +4,13 @@ import com.bubbles.server.domain.Bubble;
 import com.bubbles.server.domain.BubbleRepository;
 import com.bubbles.server.domain.User;
 import com.bubbles.server.domain.UserRepository;
+import com.bubbles.server.util.ValidationUtils;
 import com.bubbles.server.web.viewmodel.InvalidRequestException;
 import com.bubbles.server.web.viewmodel.NoResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.*;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
@@ -50,8 +51,7 @@ public class UserController {
     public User getUserByDeviceId(@PathVariable String deviceId) {
         List<User> userList = userRepository.findByDeviceId(deviceId);
         if (userList.size() != 1) {
-            logger.error("ERROR: Get more than one user by deviceId");
-            return null;
+            logger.warn("WARNING: Get more than one user by deviceId");
         }
         return userList.get(0);
     }
@@ -71,7 +71,7 @@ public class UserController {
             throw new NoResourceException("Invalid User Id " + userId, null);
         }
         if (nickname.length() > 32) {
-            return 0;
+            throw new InvalidRequestException("Invalid nickname " + nickname, null);
         }
         return userRepository.setNicknameById(userId, nickname);
     }
@@ -83,7 +83,7 @@ public class UserController {
         }
 
         Set<ConstraintViolation<User>> set = validator.validateValue(User.class, "gender", gender);
-        BindingResult result = convertToErrors(set);
+        Errors result = ValidationUtils.convertToErrors(set, new User(), "user");
         if (result.hasErrors()) {
             throw new InvalidRequestException("Invalid User Entity", result);
         }
@@ -125,7 +125,7 @@ public class UserController {
      * Save the new bubble posted by the user.
      *
      * @param userId the user's id who posted the bubble
-     * @param bubble converted bubble object from model attribute
+     * @param bubble converted bubble object from request body
      * @return the saved bubble object
      */
     @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.POST)
@@ -139,22 +139,6 @@ public class UserController {
         bubble.setLastReplyTime(new Date());
         Bubble bubbleSaved = bubbleRepository.save(bubble);
         return bubbleSaved.getId();
-    }
-
-    /**
-     * Convert usual validate constraint violation to spring binding result.
-     *
-     * @param violationSet validated violation to be converted
-     * @return spring binding result that could be used in exception
-     */
-    private BindingResult convertToErrors(Set<ConstraintViolation<User>> violationSet)
-    {
-        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(new User(), "User");
-        for (ConstraintViolation violation : violationSet) {
-            FieldError fieldError = new FieldError("User", violation.getPropertyPath().toString(), violation.getMessage());
-            bindingResult.addError(fieldError);
-        }
-        return bindingResult;
     }
 
 }
