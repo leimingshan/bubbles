@@ -47,4 +47,12 @@ public interface BubbleRepository extends CrudRepository<Bubble, Long> {
     List<Bubble> findRepliesByBubbleIdOrderByTime(Long bubbleId);
 
     List<Bubble> findTop5ByParentBubbleId(Long parentBubbleId, Pageable pageable);
+
+    @Query("from Bubble b where b.latitude between ?1 and ?2 and b.longitude between ?3 and ?4 order by b.score desc")
+    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
+    List<Bubble> findHotBubbles(double minLat, double maxLat, double minLon, double maxLon, Pageable pageable);
+
+    @Query("from Bubble b where b.latitude between ?1 and ?2 and b.longitude between ?3 and ?4 order by b.timestamp desc")
+    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
+    List<Bubble> findNewBubbles(double minLat, double maxLat, double minLon, double maxLon, Pageable pageable);
 }

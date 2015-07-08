@@ -2,6 +2,9 @@ package com.bubbles.server.web;
 
 import com.bubbles.server.domain.Bubble;
 import com.bubbles.server.domain.BubbleRepository;
+import com.bubbles.server.util.GeoPosition;
+import com.bubbles.server.util.GeoPositionUtils;
+import com.bubbles.server.web.viewmodel.InvalidRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,10 +55,44 @@ public class BubbleController {
     public List<Bubble> getBubblesByLocation(@RequestParam("longitude") double longitude,
                                              @RequestParam("latitude") double latitude,
                                              @RequestParam("offset") int offset,
-                                             @RequestParam("type") String type) {
+                                             @RequestParam("type") String type,
+                                             @PageableDefault(page = 0, size = pageSize) Pageable pageable) {
 
+        // validate request params
         // TODO
-        List<Bubble> bubbleList = new ArrayList<Bubble>();
+
+        // get location range for this location as center point
+        GeoPosition northPoint = GeoPositionUtils.getDestinationPosition(latitude, longitude, 0.0, maxDistance);
+        GeoPosition eastPoint = GeoPositionUtils.getDestinationPosition(latitude, longitude, 90.0, maxDistance);
+        GeoPosition southPoint = GeoPositionUtils.getDestinationPosition(latitude, longitude, 180.0, maxDistance);
+        GeoPosition westPoint = GeoPositionUtils.getDestinationPosition(latitude, longitude, 270.0, maxDistance);
+
+        double minLatitude = southPoint.getLatitude();
+        double maxLatitude = northPoint.getLatitude();
+        double minLongitude = westPoint.getLongitude();
+        double maxLongitude = eastPoint.getLongitude();
+
+        // use range and type to search for bubbles
+        List<Bubble> bubbleList = null;
+        if (type.equals("new")) {
+            bubbleList = bubbleRepository.findHotBubbles(minLatitude, maxLatitude, minLongitude, maxLongitude, pageable);
+        } else  if (type.equals("hot")) {
+            bubbleList = bubbleRepository.findNewBubbles(minLatitude, maxLatitude, minLongitude, maxLongitude, pageable);
+        } else {
+            logger.error("Invalid get bubbles type: " + type);
+            throw new InvalidRequestException("Invalid get bubbles type: " + type, null);
+        }
+
+        // go through bubbles for bubble distance to determine whether this bubble could be seen
+        for (int i = bubbleList.size() - 1; i >= 0; i--) {
+            double bubbleLat = bubbleList.get(i).getLatitude();
+            double bubbleLon = bubbleList.get(i).getLongitude();
+            int distance = bubbleList.get(i).getDistance();
+            double actualDistance = GeoPositionUtils.getDistance(latitude, longitude, bubbleLat, bubbleLon);
+            if (actualDistance > distance)
+                bubbleList.remove(i);
+        }
+
         return bubbleList;
     }
 
