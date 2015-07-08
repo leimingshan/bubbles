@@ -9,12 +9,24 @@ package com.bubbles.server.util;
  */
 public class GeoPositionUtils {
 
-    private static final double earthRadius = 6371000; //meters 3958.75 miles (or 6371.0 kilometers)
+    private static final double earthRadius = 6371000; //meters, 3958.75 miles (or 6371.0 kilometers)
 
     public static double getEarthRadius() {
         return earthRadius;
     }
 
+    /**
+     * Calculate distance between two points on the earth.
+     * This uses the ‘haversine’ formula to calculate the great-circle distance between two points –
+     * that is, the shortest distance over the earth’s surface – giving an ‘as-the-crow-flies’
+     * distance between the points
+     *
+     * @param lat1 latitude of start point
+     * @param lon1 longitude of start point
+     * @param lat2 latitude of end point
+     * @param lon2 longitude of end point
+     * @return the calculated distance between two points
+     */
     public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
         double dLat = Math.toRadians(lat2 - lat1);
         double dLng = Math.toRadians(lon2 - lon1);
@@ -27,6 +39,16 @@ public class GeoPositionUtils {
         return dist;
     }
 
+    /**
+     * Given a start point, initial bearing, and distance, this will calculate the destination point
+     * and final bearing travelling along a (shortest distance) great circle arc.
+     *
+     * @param lat1 latitude of start point
+     * @param lon1 longitude of start point
+     * @param bearing bearing (clockwise from north)
+     * @param distance distance to the destination point
+     * @return the destination point position
+     */
     public static GeoPosition getDestinationPosition(double lat1, double lon1, double bearing, double distance) {
         double angDist = distance / earthRadius;
         double dBearing = Math.toRadians(bearing);
