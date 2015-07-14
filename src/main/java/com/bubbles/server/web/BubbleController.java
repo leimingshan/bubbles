@@ -75,12 +75,17 @@ public class BubbleController {
         // use range and type to search for bubbles
         List<Bubble> bubbleList = null;
         if (type.equals("new")) {
-            bubbleList = bubbleRepository.findHotBubbles(minLatitude, maxLatitude, minLongitude, maxLongitude, pageable);
-        } else  if (type.equals("hot")) {
             bubbleList = bubbleRepository.findNewBubbles(minLatitude, maxLatitude, minLongitude, maxLongitude, pageable);
+        } else  if (type.equals("hot")) {
+            bubbleList = bubbleRepository.findHotBubbles(minLatitude, maxLatitude, minLongitude, maxLongitude, pageable);
         } else {
             logger.error("Invalid get bubbles type: " + type);
             throw new InvalidRequestException("Invalid get bubbles type: " + type, null);
+        }
+
+        if (bubbleList == null || bubbleList.isEmpty()) {
+            logger.info("No bubble found for this search!");
+            return bubbleList;
         }
 
         // go through bubbles for bubble distance to determine whether this bubble could be seen
