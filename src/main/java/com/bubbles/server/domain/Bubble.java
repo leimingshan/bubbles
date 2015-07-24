@@ -1,6 +1,7 @@
 package com.bubbles.server.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Entity
 @Cacheable
 @JsonIgnoreProperties({"parentBubble"})
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Bubble {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +51,17 @@ public class Bubble {
     private Double longitude;
 
     private int distance;
+
+    public Bubble() {
+        super();
+    }
+
+    public Bubble(long id, Double latitude, Double longitude) {
+        super();
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     public long getId() {
         return id;

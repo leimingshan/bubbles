@@ -1,10 +1,12 @@
 package com.bubbles.server.domain;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.QueryHint;
 import java.util.List;
@@ -55,4 +57,20 @@ public interface BubbleRepository extends CrudRepository<Bubble, Long> {
     @Query("from Bubble b where b.latitude between ?1 and ?2 and b.longitude between ?3 and ?4 order by b.timestamp desc")
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     List<Bubble> findNewBubbles(double minLat, double maxLat, double minLon, double maxLon, Pageable pageable);
+
+    @Query("select new Bubble(id, latitude, longitude) from Bubble b")
+    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
+    List<Bubble> findBriefBubbles();
+
+    /**
+     * Add specific num to bubble's score.
+     *
+     * @param bubbleId the bubble's id
+     * @param addNum socre added, could be negative
+     * @return
+     */
+    @Modifying
+    @Transactional
+    @Query("update Bubble b set b.score = b.score + ?2 where b.id = ?1")
+    int addScoreById(long bubbleId, int addNum);
 }

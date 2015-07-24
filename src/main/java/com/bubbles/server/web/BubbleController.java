@@ -50,11 +50,14 @@ public class BubbleController {
         return bubbleRepository.findTop5ByParentBubbleId(bubbleId, pageable);
     }
 
+    @RequestMapping(value = "/brief", method = RequestMethod.GET)
+    public List<Bubble> getBriefBubbles() {
+        return bubbleRepository.findBriefBubbles();
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Bubble> getBubblesByLocation(@RequestParam("longitude") double longitude,
                                              @RequestParam("latitude") double latitude,
-                                             @RequestParam("offset") int offset,
                                              @RequestParam("type") String type,
                                              @PageableDefault(page = 0, size = pageSize) Pageable pageable) {
 
@@ -100,5 +103,15 @@ public class BubbleController {
 
         return bubbleList;
     }
+
+    @RequestMapping(value = "/{bubbleId}/score", method = RequestMethod.POST)
+    public int addBubbleScoreById(@PathVariable long bubbleId,
+                                  @RequestParam("add") int addNum) {
+        // TODO
+        // validate bubbleId here
+        return bubbleRepository.addScoreById(bubbleId, addNum);
+    }
+
+
 
 }
