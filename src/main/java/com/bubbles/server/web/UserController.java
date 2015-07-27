@@ -1,9 +1,6 @@
 package com.bubbles.server.web;
 
-import com.bubbles.server.domain.Bubble;
-import com.bubbles.server.domain.BubbleRepository;
-import com.bubbles.server.domain.User;
-import com.bubbles.server.domain.UserRepository;
+import com.bubbles.server.domain.*;
 import com.bubbles.server.util.ValidationUtils;
 import com.bubbles.server.web.viewmodel.InvalidRequestException;
 import com.bubbles.server.web.viewmodel.NoResourceException;
@@ -41,12 +38,24 @@ public class UserController {
     @Autowired
     private Validator validator;
 
+    /**
+     * Get user entity by id.
+     *
+     * @param userId the user's id to search for
+     * @return the user entity found
+     */
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public User getUser(@PathVariable long userId) {
+    public User getUserById(@PathVariable long userId) {
         User user = userRepository.findOne(userId);
         return user;
     }
 
+    /**
+     * Get user entity by deviceId.
+     *
+     * @param deviceId the user's deviceId to search for
+     * @return the user entity found
+     */
     @RequestMapping(value = "/search/deviceId/{deviceId}", method = RequestMethod.GET)
     public User getUserByDeviceId(@PathVariable String deviceId) {
         List<User> userList = userRepository.findByDeviceId(deviceId);
@@ -56,13 +65,36 @@ public class UserController {
         return userList.get(0);
     }
 
+    @RequestMapping(value = "/{userId}/stats", method = RequestMethod.GET)
+    public UserStats getUserStatsById(@PathVariable long userId) {
+        UserStats userStats = new UserStats();
+        if (!userRepository.exists(userId)) {
+            throw new NoResourceException("Invalid User Id " + userId, null);
+        }
+        // search for user stats info
+        userStats.setId(userId);
+        userStats.setPostBubblesCount(userRepository.findPostBubblesCountById(userId));
 
-    @RequestMapping(value = "/{userId}/score", method = {RequestMethod.PATCH, RequestMethod.POST})  // Partially update
+        userStats.setPostRepliesCount(userRepository.findPostRepliesCountById(userId));
+        userStats.setGetRepliesCount(userRepository.findGetRepliesCountById(userId));
+        
+        return userStats;
+    }
+
+    @RequestMapping(value = "/{userId}/score", method = {RequestMethod.PATCH})  // Partially update
     public int updateScore(@PathVariable long userId, @RequestParam("score") int score) {
         if (!userRepository.exists(userId)) {
             throw new NoResourceException("Invalid User Id " + userId, null);
         }
         return userRepository.setScoreById(userId, score);
+    }
+
+    @RequestMapping(value = "/{userId}/score", method = {RequestMethod.POST})
+    public int addScore(@PathVariable long userId, @RequestParam("add") int addNum) {
+        if (!userRepository.exists(userId)) {
+            throw new NoResourceException("Invalid User Id " + userId, null);
+        }
+        return userRepository.addScoreById(userId, addNum);
     }
 
     @RequestMapping(value = "/{userId}/nickname", method = {RequestMethod.PATCH, RequestMethod.POST})
@@ -93,11 +125,11 @@ public class UserController {
     // HTTP method PUT update a resource -- all update
 
     /**
-     * Create the user and save user info.
+     * Create the user and save the user entity.
      *
      * @param user   user object generated from request params
      * @param errors validation result of user model in request body
-     * @return id of the saved user
+     * @return id of the saved user entity
      */
     @RequestMapping(method = RequestMethod.POST) // create a new resource in collection
     public long saveUser(@Valid @RequestBody User user, Errors errors) {
@@ -109,6 +141,7 @@ public class UserController {
     }
 
     // bubbles operations below
+    // get and post bubbles or replies
 
     /**
      * Find all bubbles posted by the user.
@@ -116,7 +149,7 @@ public class UserController {
      * @param userId user's id
      * @return bubble list. {@code null} if no bubbles found for the user.
      */
-    @RequestMapping(value = "/{userId}/bubbles")
+    @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.GET)
     public List<Bubble> getBubblesByUserId(@PathVariable long userId) {
         return bubbleRepository.findByUserIdOrderByTime(userId);
     }
@@ -128,7 +161,7 @@ public class UserController {
      * @param bubble converted bubble object from request body
      * @return the saved bubble object
      */
-    @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.POST)
+    @RequestMapping(value = {"/{userId}/bubbles", "/{userId}/replies"}, method = RequestMethod.POST)
     public long saveBubble(@PathVariable long userId, @RequestBody Bubble bubble) {
         User user = userRepository.findOne(userId);
         if (user == null) {

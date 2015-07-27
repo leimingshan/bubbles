@@ -61,6 +61,15 @@ public class UserRepositoryTest {
     }
 
     @Test
+    public void testAddScore() {
+        userRepository.setScoreById(10000L, 500);
+        userRepository.addScoreById(10000L, 1);
+        User user = userRepository.findOne(10000L);
+        assertNotNull(user);
+        assertEquals(501, user.getScore());
+    }
+
+    @Test
     public void testSetNickname() {
         userRepository.setNicknameById(10001L, "test-nickname");
         User user = userRepository.findOne(10001L);
@@ -75,4 +84,23 @@ public class UserRepositoryTest {
         assertNotNull(user);
         assertEquals("m", user.getGender());
     }
+
+    @Test
+    public void testFindPostBubblesCountById() {
+        int count = userRepository.findPostBubblesCountById(10000L);
+        assertEquals(1, count);
+    }
+
+    @Test
+    public void testFindPostRepliesCountById() {
+        int count = userRepository.findPostRepliesCountById(10000L);
+        assertEquals(1, count);
+    }
+
+    @Test
+    public void testFindGetRepliesCountById() {
+        int count = userRepository.findGetRepliesCountById(10000L);
+        assertEquals(1, count);
+    }
+
 }

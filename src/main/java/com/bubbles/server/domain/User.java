@@ -34,9 +34,7 @@ public class User {
     private String avatarUrl;
 
     private int score;
-    private int pubNum;
-    private int giveReplyNum;
-    private int getReplyNum;
+
     private int getUpNum;
     private int giveUpNum;
 
@@ -96,30 +94,6 @@ public class User {
         this.score = score;
     }
 
-    public int getPubNum() {
-        return pubNum;
-    }
-
-    public void setPubNum(int pubNum) {
-        this.pubNum = pubNum;
-    }
-
-    public int getGiveReplyNum() {
-        return giveReplyNum;
-    }
-
-    public void setGiveReplyNum(int giveReplyNum) {
-        this.giveReplyNum = giveReplyNum;
-    }
-
-    public int getGetReplyNum() {
-        return getReplyNum;
-    }
-
-    public void setGetReplyNum(int getReplyNum) {
-        this.getReplyNum = getReplyNum;
-    }
-
     public int getGetUpNum() {
         return getUpNum;
     }
@@ -138,9 +112,16 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format(
-                "User[id=%d deviceid=%s, phonenum=%s, score=%d",
-                id, deviceId, cellphone, score);
+        return "User{" +
+                "id=" + id +
+                ", deviceId='" + deviceId + '\'' +
+                ", cellphone='" + cellphone + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", score=" + score +
+                ", getUpNum=" + getUpNum +
+                ", giveUpNum=" + giveUpNum +
+                '}';
     }
-
 }
