@@ -3,6 +3,7 @@ package com.bubbles.server.domain;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Entity User, mapped to table user
@@ -37,6 +38,10 @@ public class User {
 
     private int getUpNum;
     private int giveUpNum;
+
+    private Date createdDate;
+
+    private Date modifiedDate;
 
     public long getId() {
         return id;
@@ -108,6 +113,22 @@ public class User {
 
     public void setGiveUpNum(int giveUpNum) {
         this.giveUpNum = giveUpNum;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     @Override

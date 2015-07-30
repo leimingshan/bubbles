@@ -136,6 +136,8 @@ public class UserController {
         if (errors.hasErrors()) {
             throw new InvalidRequestException("Invalid User Entity", errors);
         }
+        user.setCreatedDate(new Date());
+        user.setModifiedDate(new Date());
         User userSaved = userRepository.save(user);
         return userSaved.getId();
     }
