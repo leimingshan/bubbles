@@ -77,7 +77,7 @@ public class UserController {
 
         userStats.setPostRepliesCount(userRepository.findPostRepliesCountById(userId));
         userStats.setGetRepliesCount(userRepository.findGetRepliesCountById(userId));
-        
+
         return userStats;
     }
 
@@ -155,22 +155,65 @@ public class UserController {
     }
 
     /**
-     * Save the new bubble posted by the user.
+     * Save new bubble posted by the user.
      *
      * @param userId the user's id who posted the bubble
-     * @param bubble converted bubble object from request body
-     * @return the saved bubble object
+     * @param bubble converted bubble entity from request body
+     * @return id of the saved bubble entity
      */
-    @RequestMapping(value = {"/{userId}/bubbles", "/{userId}/replies"}, method = RequestMethod.POST)
+    @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.POST)
     public long saveBubble(@PathVariable long userId, @RequestBody Bubble bubble) {
         User user = userRepository.findOne(userId);
         if (user == null) {
             throw new NoResourceException("Invalid User Id " + userId, null);
         }
+
+        // validate bubble properties
+        if (bubble.getLatitude() == null || bubble.getLongitude() == null || bubble.getDistance() == null) {
+            throw new InvalidRequestException("Invalid bubble properties", null);
+        }
+
         bubble.setUser(user);
         bubble.setTimestamp(new Date());
         bubble.setLastReplyTime(new Date());
         Bubble bubbleSaved = bubbleRepository.save(bubble);
+        return bubbleSaved.getId();
+    }
+
+    /**
+     * Save new reply posted by the user.
+     *
+     * @param userId the user's id who posted the reply
+     * @param bubble converted bubble entity from request body
+     * @return id of the save bubble entity
+     */
+    @RequestMapping(value = "/{userId}/replies", method = RequestMethod.POST)
+    public long saveReply(@PathVariable long userId, @RequestBody Bubble bubble) {
+        User user = userRepository.findOne(userId);
+        if (user == null) {
+            throw new NoResourceException("Invalid User Id " + userId, null);
+        }
+
+        if (bubble.getParentBubbleId() == null) {
+            throw  new InvalidRequestException("Invalid reply: no parent bubble id", null);
+        }
+
+        bubble.setUser(user);
+        bubble.setTimestamp(new Date());
+        bubble.setLastReplyTime(new Date());
+        Bubble bubbleSaved = bubbleRepository.save(bubble);
+
+        // set parent bubble reply time
+        Bubble parentBubble = bubbleRepository.findOne(bubble.getParentBubbleId());
+        parentBubble.setLastReplyTime(new Date());
+        bubbleRepository.save(parentBubble);
+
+        if (bubble.getParentId() != null) {
+            Bubble parent = bubbleRepository.findOne(bubble.getParentId());
+            parent.setLastReplyTime(new Date());
+            bubbleRepository.save(parent);
+        }
+
         return bubbleSaved.getId();
     }
 

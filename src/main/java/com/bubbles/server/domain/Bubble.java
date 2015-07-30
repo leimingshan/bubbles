@@ -50,7 +50,7 @@ public class Bubble {
     private Double latitude;
     private Double longitude;
 
-    private int distance;
+    private Integer distance;
 
     public Bubble() {
         super();
@@ -151,11 +151,11 @@ public class Bubble {
         this.longitude = longitude;
     }
 
-    public int getDistance() {
+    public Integer getDistance() {
         return distance;
     }
 
-    public void setDistance(int distance) {
+    public void setDistance(Integer distance) {
         this.distance = distance;
     }
 
