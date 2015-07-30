@@ -206,11 +206,13 @@ public class UserController {
         // set parent bubble reply time
         Bubble parentBubble = bubbleRepository.findOne(bubble.getParentBubbleId());
         parentBubble.setLastReplyTime(new Date());
+        parentBubble.setReplyNum(parentBubble.getReplyNum() + 1);
         bubbleRepository.save(parentBubble);
 
         if (bubble.getParentId() != null) {
             Bubble parent = bubbleRepository.findOne(bubble.getParentId());
             parent.setLastReplyTime(new Date());
+            parent.setReplyNum(parent.getReplyNum() + 1);
             bubbleRepository.save(parent);
         }
 

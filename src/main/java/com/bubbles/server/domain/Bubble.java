@@ -41,8 +41,8 @@ public class Bubble {
 
     private String content;
 
-    private int replyNum;
-    private int score;
+    private Integer replyNum;
+    private Integer score;
 
     private Date timestamp;
     private Date lastReplyTime;
@@ -103,19 +103,19 @@ public class Bubble {
         this.content = content;
     }
 
-    public int getReplyNum() {
+    public Integer getReplyNum() {
         return replyNum;
     }
 
-    public void setReplyNum(int replyNum) {
+    public void setReplyNum(Integer replyNum) {
         this.replyNum = replyNum;
     }
 
-    public int getScore() {
+    public Integer getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(Integer score) {
         this.score = score;
     }
 
@@ -159,4 +159,21 @@ public class Bubble {
         this.distance = distance;
     }
 
+    @Override
+    public String toString() {
+        return "Bubble{" +
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", parentBubbleId=" + parentBubbleId +
+                ", user=" + user +
+                ", content='" + content + '\'' +
+                ", replyNum=" + replyNum +
+                ", score=" + score +
+                ", timestamp=" + timestamp +
+                ", lastReplyTime=" + lastReplyTime +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", distance=" + distance +
+                '}';
+    }
 }

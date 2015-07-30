@@ -58,7 +58,7 @@ public interface BubbleRepository extends CrudRepository<Bubble, Long> {
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     List<Bubble> findNewBubbles(double minLat, double maxLat, double minLon, double maxLon, Pageable pageable);
 
-    @Query("select new Bubble(id, latitude, longitude) from Bubble b")
+    @Query("select new Bubble(id, latitude, longitude) from Bubble b where b.latitude != null and b.longitude != null")
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     List<Bubble> findBriefBubbles();
 
