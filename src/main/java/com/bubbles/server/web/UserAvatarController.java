@@ -46,10 +46,12 @@ public class UserAvatarController {
 
         ObjectMapper mapper = new ObjectMapper();
         Date timestamp = null;
-        try {
-            timestamp = mapper.readValue(timestampString, Date.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (timestampString != null && !timestampString.isEmpty()) {
+            try {
+                timestamp = mapper.readValue(timestampString, Date.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         if (timestamp == null || timestamp.before(user.getModifiedDate())) {
