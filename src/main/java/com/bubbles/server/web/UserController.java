@@ -59,7 +59,7 @@ public class UserController {
     @RequestMapping(value = "/search/deviceId/{deviceId}", method = RequestMethod.GET)
     public User getUserByDeviceId(@PathVariable String deviceId) {
         List<User> userList = userRepository.findByDeviceId(deviceId);
-        if (userList == null) {
+        if (userList == null || userList.isEmpty()) {
             logger.error("Invalid device Id " + deviceId);
             throw new NoResourceException("Invalid device Id " + deviceId, null);
         }
