@@ -59,6 +59,10 @@ public class UserController {
     @RequestMapping(value = "/search/deviceId/{deviceId}", method = RequestMethod.GET)
     public User getUserByDeviceId(@PathVariable String deviceId) {
         List<User> userList = userRepository.findByDeviceId(deviceId);
+        if (userList == null) {
+            logger.error("Invalid device Id " + deviceId);
+            throw new NoResourceException("Invalid device Id " + deviceId, null);
+        }
         if (userList.size() != 1) {
             logger.warn("WARNING: Get more than one user by deviceId");
         }
@@ -154,6 +158,11 @@ public class UserController {
     @RequestMapping(value = "/{userId}/bubbles", method = RequestMethod.GET)
     public List<Bubble> getBubblesByUserId(@PathVariable long userId) {
         return bubbleRepository.findByUserIdOrderByTime(userId);
+    }
+
+    @RequestMapping(value = "/{userId}/participated", method = RequestMethod.GET)
+    public List<Bubble> getParticipatedBubblesByUserId(@PathVariable long userId) {
+        return bubbleRepository.findParticipateBubblesByUserId(userId);
     }
 
     /**
