@@ -47,7 +47,15 @@ public class BubbleController {
     @RequestMapping(value = "/{bubbleId}/replies/top", method = RequestMethod.GET)
     public List<Bubble> getTop5RepliesByBubbleId(@PathVariable long bubbleId,
                                                  @PageableDefault(page = 0, size = pageSize, sort = {"score"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        return bubbleRepository.findTop5ByParentBubbleId(bubbleId, pageable);
+        List<Bubble> topReplies = bubbleRepository.findTop5ByParentBubbleId(bubbleId, pageable);
+        for (int i = 0; i < topReplies.size(); i++) {
+            Bubble reply = topReplies.get(i);
+            if (reply.getScore() == 0) {
+                topReplies.remove(i);
+                i--;
+            }
+        }
+        return topReplies;
     }
 
     @RequestMapping(value = "/brief", method = RequestMethod.GET)
