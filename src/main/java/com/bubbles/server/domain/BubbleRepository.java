@@ -38,6 +38,22 @@ public interface BubbleRepository extends CrudRepository<Bubble, Long> {
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
     List<Bubble> findByUserIdOrderByTime(long userId);
 
+    @Query(value = "SELECT * FROM\n" +
+            "(\n" +
+            "SELECT * FROM bubble\n" +
+            "WHERE bubble.id IN\n" +
+            "(\n" +
+            "SELECT DISTINCT(parent_bubble_id) FROM bubble \n" +
+            "WHERE bubble.author_id = ?1 AND !ISNULL(parent_bubble_id)\n" +
+            ")\n" +
+            "UNION\n" +
+            "SELECT * FROM bubble\n" +
+            "where bubble.author_id = ?1\n" +
+            ") AS a\n" +
+            "ORDER BY a.timestamp DESC", nativeQuery = true)
+    @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})
+    List<Bubble> findParticipateBubblesByUserId(long userId);
+
     /**
      * Find the bubble's all replies by bubble's id.
      *
