@@ -2,9 +2,11 @@ package com.bubbles.server.web;
 
 import com.bubbles.server.domain.Bubble;
 import com.bubbles.server.domain.BubbleRepository;
+import com.bubbles.server.domain.UserRepository;
 import com.bubbles.server.util.GeoPosition;
 import com.bubbles.server.util.GeoPositionUtils;
 import com.bubbles.server.web.viewmodel.InvalidRequestException;
+import com.bubbles.server.web.viewmodel.NoResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class BubbleController {
 
     @Autowired
     private BubbleRepository bubbleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @RequestMapping(value = "/{bubbleId}", method = RequestMethod.GET)
     public Bubble getBubbleById(@PathVariable long bubbleId) {
@@ -70,7 +75,14 @@ public class BubbleController {
                                              @PageableDefault(page = 0, size = pageSize) Pageable pageable) {
 
         // validate request params
-        // TODO
+        if (longitude < -180 || longitude > 180) {
+            logger.error("Invalid longitude: " + longitude);
+            throw new InvalidRequestException("Invalid longitude: " + longitude, null);
+        }
+        if (latitude < -90 || latitude > 90) {
+            logger.error("Invalid latitude: " + latitude);
+            throw new InvalidRequestException("Invalid latitude: " + latitude, null);
+        }
 
         // get location range for this location as center point
         GeoPosition northPoint = GeoPositionUtils.getDestinationPosition(latitude, longitude, 0.0, maxDistance);
@@ -115,11 +127,17 @@ public class BubbleController {
     @RequestMapping(value = "/{bubbleId}/score", method = RequestMethod.POST)
     public int addBubbleScoreById(@PathVariable long bubbleId,
                                   @RequestParam("add") int addNum) {
-        // TODO
-        // validate bubbleId here
+        if (!bubbleRepository.exists(bubbleId)) {
+            logger.error("Invalid Bubble Id " + bubbleId);
+            throw new NoResourceException("Invalid Bubble Id " + bubbleId, null);
+        }
+
+        // add the author's score by 1 if addNum is 1
+        Bubble bubble = bubbleRepository.findOne(bubbleId);
+        long author = bubble.getUser().getId();
+        userRepository.addScoreById(author, addNum);
+        
         return bubbleRepository.addScoreById(bubbleId, addNum);
     }
-
-
 
 }

@@ -188,6 +188,10 @@ public class UserController {
         bubble.setTimestamp(new Date());
         bubble.setLastReplyTime(new Date());
         Bubble bubbleSaved = bubbleRepository.save(bubble);
+
+        // add the author's score by 5
+        userRepository.addScoreById(userId, 5);
+
         return bubbleSaved.getId();
     }
 
@@ -226,6 +230,10 @@ public class UserController {
             parent.setReplyNum(parent.getReplyNum() + 1);
             bubbleRepository.save(parent);
         }
+
+        // add the replied to bubble's author's score by 2
+        long parentBubbleAuthorId = parentBubble.getUser().getId();
+        userRepository.addScoreById(parentBubbleAuthorId, 2);
 
         return bubbleSaved.getId();
     }
