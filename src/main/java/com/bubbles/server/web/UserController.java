@@ -29,6 +29,12 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    private static final int bubbleScore = 10; // add the author's score by 10 if he posted one new bubble
+
+    private static final int getReplyScore = 2; // get one new reply, add score by 2
+
+    private static final int postReplyScore = 2; // post one new reply, add score by 2
+
     @Autowired
     private UserRepository userRepository;
 
@@ -81,6 +87,8 @@ public class UserController {
 
         userStats.setPostRepliesCount(userRepository.findPostRepliesCountById(userId));
         userStats.setGetRepliesCount(userRepository.findGetRepliesCountById(userId));
+
+        userStats.setGetPraiseCount(userRepository.findOne(userId).getGetUpNum());
 
         return userStats;
     }
@@ -189,8 +197,8 @@ public class UserController {
         bubble.setLastReplyTime(new Date());
         Bubble bubbleSaved = bubbleRepository.save(bubble);
 
-        // add the author's score by 5
-        userRepository.addScoreById(userId, 5);
+        // add the author's score by 10 if he posted one new bubble
+        userRepository.addScoreById(userId, bubbleScore);
 
         return bubbleSaved.getId();
     }
@@ -233,7 +241,10 @@ public class UserController {
 
         // add the replied to bubble's author's score by 2
         long parentBubbleAuthorId = parentBubble.getUser().getId();
-        userRepository.addScoreById(parentBubbleAuthorId, 2);
+        userRepository.addScoreById(parentBubbleAuthorId, getReplyScore);
+
+        // add the score by 2 when posted one new reply
+        userRepository.addScoreById(userId, postReplyScore);
 
         return bubbleSaved.getId();
     }
