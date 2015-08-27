@@ -75,20 +75,31 @@ public class UserController {
         return userList.get(0);
     }
 
+    /**
+     * Get user statistics of scores by userId.
+     *
+     * @param userId the user's id
+     * @return the user stats entity
+     */
     @RequestMapping(value = "/{userId}/stats", method = RequestMethod.GET)
     public UserStats getUserStatsById(@PathVariable long userId) {
         UserStats userStats = new UserStats();
         if (!userRepository.exists(userId)) {
             throw new NoResourceException("Invalid User Id " + userId, null);
         }
+
+        User currentUser = userRepository.findOne(userId);
+
         // search for user stats info
         userStats.setId(userId);
-        userStats.setPostBubblesCount(userRepository.findPostBubblesCountById(userId));
+        userStats.setScore(currentUser.getScore());
 
+        // use sql to calculate real-time statistics
+        userStats.setPostBubblesCount(userRepository.findPostBubblesCountById(userId));
         userStats.setPostRepliesCount(userRepository.findPostRepliesCountById(userId));
         userStats.setGetRepliesCount(userRepository.findGetRepliesCountById(userId));
 
-        userStats.setGetPraiseCount(userRepository.findOne(userId).getGetUpNum());
+        userStats.setGetPraiseCount(currentUser.getGetUpNum());
 
         return userStats;
     }

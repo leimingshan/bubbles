@@ -10,6 +10,8 @@ public class UserStats {
 
     private Long id;
 
+    private Integer score;
+
     private Integer postBubblesCount;
 
     private Integer postRepliesCount;
@@ -23,6 +25,14 @@ public class UserStats {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
     public Integer getPostBubblesCount() {
@@ -61,6 +71,7 @@ public class UserStats {
     public String toString() {
         return "UserStats{" +
                 "id=" + id +
+                "score=" + score +
                 ", postBubblesCount=" + postBubblesCount +
                 ", postRepliesCount=" + postRepliesCount +
                 ", getRepliesCount=" + getRepliesCount +
