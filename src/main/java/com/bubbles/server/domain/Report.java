@@ -1,33 +1,29 @@
 package com.bubbles.server.domain;
 
-import org.hibernate.validator.constraints.Email;
-
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * Entity Advice, mapped to table advice.
+ * Entity Report, mapped to table report.
  *
  * @author Mingshan Lei
  * @since 2015/8/27
  */
 @Entity
 @Cacheable
-public class Advice {
+public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotNull
+    private Long bubbleId;
+
+    @NotNull
+    private Integer category;
+
     private String content;
-
-    @Email
-    private String email;
-
-    @Digits(integer = 13, fraction = 0)
-    private String cellphone;
 
     private Date createdDate;
     private Date modifiedDate;
@@ -40,28 +36,28 @@ public class Advice {
         this.id = id;
     }
 
+    public Long getBubbleId() {
+        return bubbleId;
+    }
+
+    public void setBubbleId(Long bubbleId) {
+        this.bubbleId = bubbleId;
+    }
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getCellphone() {
-        return cellphone;
-    }
-
-    public void setCellphone(String cellphone) {
-        this.cellphone = cellphone;
     }
 
     public Date getCreatedDate() {
@@ -82,11 +78,11 @@ public class Advice {
 
     @Override
     public String toString() {
-        return "Advice{" +
+        return "Report{" +
                 "id=" + id +
+                ", bubbleId=" + bubbleId +
+                ", category=" + category +
                 ", content='" + content + '\'' +
-                ", email='" + email + '\'' +
-                ", cellphone='" + cellphone + '\'' +
                 ", createdDate=" + createdDate +
                 ", modifiedDate=" + modifiedDate +
                 '}';
