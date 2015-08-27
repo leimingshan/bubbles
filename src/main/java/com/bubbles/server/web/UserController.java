@@ -150,7 +150,7 @@ public class UserController {
     /**
      * Create the user and save the user entity.
      *
-     * @param user   user object generated from request params
+     * @param user   user object generated from request body
      * @param errors validation result of user model in request body
      * @return id of the saved user entity
      */

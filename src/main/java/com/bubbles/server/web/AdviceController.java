@@ -23,11 +23,24 @@ public class AdviceController {
     @Autowired
     private AdviceRepository adviceRepository;
 
+    /**
+     * Get advice entity by id.
+     *
+     * @param adviceId
+     * @return the advice entity
+     */
     @RequestMapping(value = "/{adviceId}", method = RequestMethod.GET)
     public Advice getAdviceById(@PathVariable long adviceId) {
         return adviceRepository.findOne(adviceId);
     }
 
+    /**
+     * Create and save the advice.
+     *
+     * @param advice advice object generated from request body
+     * @param errors validation result of advice model in request body
+     * @return id of the saved advice entity
+     */
     @RequestMapping(method = RequestMethod.POST)
     public long saveAdvice(@Valid @RequestBody Advice advice, Errors errors) {
         if (errors.hasErrors()) {

@@ -23,7 +23,6 @@ public class Advice {
     @NotNull
     private String content;
 
-    @NotNull
     @Email
     private String email;
 
