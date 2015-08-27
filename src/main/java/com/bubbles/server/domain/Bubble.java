@@ -1,6 +1,5 @@
 package com.bubbles.server.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
@@ -14,7 +13,6 @@ import java.util.Date;
  */
 @Entity
 @Cacheable
-@JsonIgnoreProperties({"parentBubble"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Bubble {
     @Id
