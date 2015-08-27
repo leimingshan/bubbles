@@ -136,7 +136,7 @@ public class BubbleController {
         Bubble bubble = bubbleRepository.findOne(bubbleId);
         long author = bubble.getUser().getId();
         userRepository.addScoreById(author, addNum);
-        
+
         return bubbleRepository.addScoreById(bubbleId, addNum);
     }
 
