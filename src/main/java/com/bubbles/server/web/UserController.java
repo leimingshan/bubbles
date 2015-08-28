@@ -99,7 +99,7 @@ public class UserController {
         userStats.setPostRepliesCount(userRepository.findPostRepliesCountById(userId));
         userStats.setGetRepliesCount(userRepository.findGetRepliesCountById(userId));
 
-        userStats.setGetPraiseCount(currentUser.getGetUpNum());
+        userStats.setApprovalCount(currentUser.getGetUpNum());
 
         return userStats;
     }

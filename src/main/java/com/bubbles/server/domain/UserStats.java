@@ -17,7 +17,7 @@ public class UserStats {
     private Integer postRepliesCount;
     private Integer getRepliesCount;
 
-    private Integer getPraiseCount;
+    private Integer approvalCount;
 
     public Long getId() {
         return id;
@@ -59,23 +59,23 @@ public class UserStats {
         this.getRepliesCount = getRepliesCount;
     }
 
-    public Integer getGetPraiseCount() {
-        return getPraiseCount;
+    public Integer getApprovalCount() {
+        return approvalCount;
     }
 
-    public void setGetPraiseCount(Integer getPraiseCount) {
-        this.getPraiseCount = getPraiseCount;
+    public void setApprovalCount(Integer approvalCount) {
+        this.approvalCount = approvalCount;
     }
 
     @Override
     public String toString() {
         return "UserStats{" +
                 "id=" + id +
-                "score=" + score +
+                ", score=" + score +
                 ", postBubblesCount=" + postBubblesCount +
                 ", postRepliesCount=" + postRepliesCount +
                 ", getRepliesCount=" + getRepliesCount +
-                ", getPraiseCount=" + getPraiseCount +
+                ", approvalCount=" + approvalCount +
                 '}';
     }
 }
