@@ -1,5 +1,6 @@
 package com.bubbles.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
@@ -8,14 +9,15 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
- * Entity Advice, mapped to table advice.
+ * Entity Feedback, mapped to table feedback.
  *
  * @author Mingshan Lei
  * @since 2015/8/27
  */
 @Entity
 @Cacheable
-public class Advice {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -82,7 +84,7 @@ public class Advice {
 
     @Override
     public String toString() {
-        return "Advice{" +
+        return "Feedback{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
                 ", email='" + email + '\'' +
