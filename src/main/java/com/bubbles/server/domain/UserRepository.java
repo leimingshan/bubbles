@@ -59,4 +59,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query(value = "SELECT COUNT(*) FROM bubble WHERE bubble.parent_bubble_id IN ( SELECT id FROM bubble WHERE bubble.author_id = ?1)", nativeQuery = true)
     int findGetRepliesCountById(long userId);
 
+    @Query(value = "SELECT COALESCE(SUM(score), 0) FROM bubble WHERE bubble.author_id = ?1", nativeQuery = true)
+    int findApprovalCountById(long userId);
 }

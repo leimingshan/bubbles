@@ -98,8 +98,7 @@ public class UserController {
         userStats.setPostBubblesCount(userRepository.findPostBubblesCountById(userId));
         userStats.setPostRepliesCount(userRepository.findPostRepliesCountById(userId));
         userStats.setGetRepliesCount(userRepository.findGetRepliesCountById(userId));
-
-        userStats.setApprovalCount(currentUser.getGetUpNum());
+        userStats.setApprovalCount(userRepository.findApprovalCountById(userId));
 
         return userStats;
     }

@@ -36,11 +36,7 @@ public class User {
 
     private int score;
 
-    private int getUpNum;
-    private int giveUpNum;
-
     private Date createdDate;
-
     private Date modifiedDate;
 
     public long getId() {
@@ -99,22 +95,6 @@ public class User {
         this.score = score;
     }
 
-    public int getGetUpNum() {
-        return getUpNum;
-    }
-
-    public void setGetUpNum(int getUpNum) {
-        this.getUpNum = getUpNum;
-    }
-
-    public int getGiveUpNum() {
-        return giveUpNum;
-    }
-
-    public void setGiveUpNum(int giveUpNum) {
-        this.giveUpNum = giveUpNum;
-    }
-
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -141,8 +121,8 @@ public class User {
                 ", gender='" + gender + '\'' +
                 ", avatarUrl='" + avatarUrl + '\'' +
                 ", score=" + score +
-                ", getUpNum=" + getUpNum +
-                ", giveUpNum=" + giveUpNum +
+                ", createdDate=" + createdDate +
+                ", modifiedDate=" + modifiedDate +
                 '}';
     }
 }
