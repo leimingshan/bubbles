@@ -1,5 +1,7 @@
 package com.bubbles.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -12,6 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Cacheable
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

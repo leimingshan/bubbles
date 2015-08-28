@@ -4,11 +4,14 @@ import com.bubbles.server.domain.Report;
 import com.bubbles.server.domain.ReportRepository;
 import com.bubbles.server.web.viewmodel.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Rest controller for report resources.
@@ -19,6 +22,8 @@ import java.util.Date;
 @RestController
 @RequestMapping("/report")
 public class ReportController {
+
+    private static final int pageSize = 20; // default page size of report
 
     @Autowired
     private ReportRepository reportRepository;
@@ -32,6 +37,17 @@ public class ReportController {
     @RequestMapping(value = "/{reportId}", method = RequestMethod.GET)
     public Report getReportById(@PathVariable long reportId) {
         return reportRepository.findOne(reportId);
+    }
+
+    /**
+     * Get report list in pages.
+     *
+     * @param pageable page and size info
+     * @return result of report list
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Report> getReportByPage(@PageableDefault(page = 0, size = pageSize) Pageable pageable) {
+        return reportRepository.findByPage(pageable);
     }
 
     /**
