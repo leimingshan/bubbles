@@ -1,7 +1,7 @@
 DELETE FROM `user` WHERE `id`='10000' OR `id`='10001';
 
-INSERT INTO `user` VALUES ('10000', '000000000010000', '10887322133', 'rayman', 'f', 'http://112.124.56.38/avatar/10000.jpg', '56', now(), now());
-INSERT INTO `user` VALUES ('10001', '000000000010001', '18734920714', 'liu', 'm', 'http://112.124.56.38/avatar/10001.jpg', '60', now(), now());
+INSERT INTO `user` VALUES ('10000', '000000000010000', '12345678912345678912', '10887322133', 'rayman', 'f', 'http://112.124.56.38/avatar/10000.jpg', '56', now(), now());
+INSERT INTO `user` VALUES ('10001', '000000000010001', '00000000000000012345','18734920714', 'liu', 'm', 'http://112.124.56.38/avatar/10001.jpg', '60', now(), now());
 
 
 DELETE FROM `bubble` WHERE `id`='10001';

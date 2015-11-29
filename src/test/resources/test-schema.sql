@@ -2,6 +2,7 @@ CREATE TABLE
 IF NOT EXISTS `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `device_id` varchar(64) NOT NULL,
+  `android_id` varchar(20) DEFAULT NULL,
   `cellphone` char(11) DEFAULT NULL,
   `nickname` varchar(32) NOT NULL,
   `gender` char(1) NOT NULL,
