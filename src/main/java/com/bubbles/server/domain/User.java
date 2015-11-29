@@ -21,6 +21,9 @@ public class User {
     @NotNull
     @Size(max = 64)
     private String deviceId;
+    
+    @Size(max = 20)
+    private String androidId;
 
     private String cellphone;
 
@@ -53,6 +56,14 @@ public class User {
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+    
+    public String getAndroidId() {
+        return androidId;
+    }
+    
+    public void setAndroidId(String androidId) {
+        this.androidId = androidId;
     }
 
     public String getCellphone() {

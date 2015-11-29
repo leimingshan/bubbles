@@ -20,6 +20,8 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<User, Long> {
 
     List<User> findByDeviceId(String deviceId);
+    
+    List<User> findByAndroidId(String androidId);
 
     @Query("select u.avatarUrl from User u where u.id = ?1")
     @QueryHints({@QueryHint(name = "org.hibernate.cacheable", value = "true")})

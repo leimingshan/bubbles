@@ -74,6 +74,25 @@ public class UserController {
         }
         return userList.get(0);
     }
+    
+    /**
+     * Get user entity by androidId.
+     *
+     * @param androidId the user's androidId to search for
+     * @return the user entity found
+     */
+    @RequestMapping(value = "/search/androidId/{androidId}", method = RequestMethod.GET)
+    public User getUserByAndroidId(@PathVariable String androidId) {
+        List<User> userList = userRepository.findByAndroidId(androidId);
+        if (userList == null || userList.isEmpty()) {
+            logger.error("Invalid android Id " + androidId);
+            throw new NoResourceException("Invalid android Id " + androidId, null);
+        }
+        if (userList.size() != 1) {
+            logger.warn("WARNING: Get more than one user by androidId");
+        }
+        return userList.get(0);
+    }
 
     /**
      * Get user statistics of scores by userId.
