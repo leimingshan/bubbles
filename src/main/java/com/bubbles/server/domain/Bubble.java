@@ -38,6 +38,8 @@ public class Bubble {
     private User user;
 
     private String content;
+    
+    private Integer emojiMarker;
 
     private Integer replyNum;
     private Integer score;
@@ -99,6 +101,14 @@ public class Bubble {
 
     public void setContent(String content) {
         this.content = content;
+    }
+    
+    public Integer getEmojiMarker() {
+        return emojiMarker;
+    }
+    
+    public void setEmojiMarker(Integer emojiMarker) {
+        this.emojiMarker = emojiMarker;
     }
 
     public Integer getReplyNum() {

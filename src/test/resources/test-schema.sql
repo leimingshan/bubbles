@@ -22,6 +22,7 @@ IF NOT EXISTS `bubble` (
   `parent_bubble_id` bigint(20) DEFAULT NULL,
   `author_id` bigint(20) NOT NULL,
   `content` varchar(255) NOT NULL,
+  `emoji_marker` int(11) DEFAULT NULL,
   `reply_num` int(11) DEFAULT NULL,
   `score` int(11) DEFAULT NULL,
   `timestamp` datetime DEFAULT NULL,
@@ -37,5 +38,7 @@ IF NOT EXISTS `bubble` (
   CONSTRAINT `fk_parent` FOREIGN KEY (`parent_id`) REFERENCES `bubble` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_parent_bubble` FOREIGN KEY (`parent_bubble_id`) REFERENCES `bubble` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_user` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10181 DEFAULT CHARSET=utf8;
+
+
 
