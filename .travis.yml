@@ -13,10 +13,7 @@ cache:
 
 before_install:
   - mysql -e "create database IF NOT EXISTS bubbles;" -uroot
+  - export TZ=Asia/Shanghai
 
 jdk:
   - oraclejdk8
-
-before_install:
-  - export TZ=Asia/Shanghai
-
