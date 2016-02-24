@@ -15,6 +15,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
+ * Exception handler for MVC.
  *
  * @author Mingshan Lei
  * @since 2015/5/29

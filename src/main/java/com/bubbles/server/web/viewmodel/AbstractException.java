@@ -20,7 +20,6 @@ public abstract class AbstractException extends RuntimeException {
     public AbstractException(String message, Errors errors) {
         super(message);
         this.errors = errors;
-
     }
 
     public HttpStatus getHttpstatus() {
