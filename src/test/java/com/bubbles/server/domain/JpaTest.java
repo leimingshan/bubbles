@@ -1,6 +1,7 @@
 package com.bubbles.server.domain;
 
 import com.bubbles.server.BubblesApplication;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

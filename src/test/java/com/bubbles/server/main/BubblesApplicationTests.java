@@ -12,6 +12,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Test for spring features.
+ *
+ * @author Mingshan Lei
+ * @since 2015/5/12
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)
 @WebAppConfiguration

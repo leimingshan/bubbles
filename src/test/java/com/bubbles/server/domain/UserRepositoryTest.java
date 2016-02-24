@@ -1,6 +1,7 @@
 package com.bubbles.server.domain;
 
 import com.bubbles.server.BubblesApplication;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
- * User Repository test.
+ * Test for User Repository.
  * @author Mingshan Lei
+ * @since 2015/5/12
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)

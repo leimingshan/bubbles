@@ -22,8 +22,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 /**
- * User controller test.
+ * Test for User web controller.
+ *
  * @author Mingshan Lei
+ * @since 2015/5/12
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BubblesApplication.class)
