@@ -1,8 +1,6 @@
 package com.bubbles.server.web;
 
 import com.bubbles.server.BubblesApplication;
-import com.bubbles.server.domain.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,9 +17,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -103,22 +100,78 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateScore() throws Exception {
+        this.mockMvc.perform(patch("/users/10000/score")
+            .param("score", "100")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(content().string("1"));
 
+        this.mockMvc.perform(patch("/users/0/score")
+            .param("score", "100")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     public void testAddScore() throws Exception {
+        this.mockMvc.perform(post("/users/10000/score")
+            .param("add", "1")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(content().string("1"));
 
+        this.mockMvc.perform(post("/users/0/score")
+            .param("add", "1")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     public void testUpdateNickname() throws Exception {
+        this.mockMvc.perform(post("/users/10000/nickname")
+            .param("nickname", "jack")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(content().string("1"));
 
+        this.mockMvc.perform(post("/users/0/nickname")
+            .param("nickname", "jack")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        this.mockMvc.perform(post("/users/10001/nickname")
+            .param("nickname", "this_nickname_is_too_long_this_nickname_is_too_long")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     public void testUpdateGender() throws Exception {
+        this.mockMvc.perform(post("/users/10000/gender")
+            .param("gender", "f")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(content().string("1"));
 
+        this.mockMvc.perform(post("/users/0/gender")
+            .param("gender", "f")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        this.mockMvc.perform(post("/users/10001/gender")
+            .param("gender", "female")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -128,12 +181,26 @@ public class UserControllerTest {
 
     @Test
     public void testGetBubblesByUserId() throws Exception {
+        this.mockMvc.perform(get("/users/10000/bubbles")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$", hasSize(2)));
 
+        this.mockMvc.perform(get("/users/10001/bubbles")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
     public void testGetParticipatedBubblesByUserId() throws Exception {
-
+        this.mockMvc.perform(get("/users/10000/participated")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
