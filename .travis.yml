@@ -12,12 +12,11 @@ cache:
     - $HOME/.gradle/wrapper/
 
 before_install:
-  - mysql -e "create database IF NOT EXISTS bubbles;" -uroot
+  - mysql -e "CREATE DATABASE IF NOT EXISTS bubbles;CREATE USER 'bubbles' IDENTIFIED BY 'bubbles';GRANT ALL ON bubbles.* TO 'bubbles'@'%' IDENTIFIED BY 'bubbles';GRANT ALL ON bubbles.* TO 'bubbles'@'localhost' IDENTIFIED BY 'bubbles';FLUSH PRIVILEGES;" -uroot
   - export TZ=Asia/Shanghai
 
 jdk:
   - oraclejdk8
-
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
