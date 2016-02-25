@@ -1,5 +1,4 @@
-CREATE TABLE
-IF NOT EXISTS `user` (
+CREATE TABLE IF NOT EXISTS `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `device_id` varchar(64) NOT NULL,
   `android_id` varchar(20) DEFAULT NULL,
@@ -15,8 +14,7 @@ IF NOT EXISTS `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE
-IF NOT EXISTS `bubble` (
+CREATE TABLE IF NOT EXISTS `bubble` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `parent_id` bigint(20) DEFAULT NULL,
   `parent_bubble_id` bigint(20) DEFAULT NULL,
@@ -40,5 +38,25 @@ IF NOT EXISTS `bubble` (
   CONSTRAINT `fk_user` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10181 DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `feedback` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `content` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `cellphone` varchar(255) DEFAULT NULL,
+  `created_date` datetime NOT NULL,
+  `modified_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `report` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `bubble_id` bigint(20) NOT NULL,
+  `category` int(11) NOT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `created_date` datetime NOT NULL,
+  `modified_date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_bubble` (`bubble_id`),
+  CONSTRAINT `fk_bubble` FOREIGN KEY (`bubble_id`) REFERENCES `bubble` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
