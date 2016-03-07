@@ -176,7 +176,17 @@ public class UserControllerTest {
 
     @Test
     public void testSaveUser() throws Exception {
+        this.mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON)
+            .content("{\"deviceId\":\"00000000000000012345\", \"nickname\":\"john\", \"gender\":\"m\"}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
+        this.mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON)
+            .content("{\"deviceId\":\"00000000000000012345\"}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
@@ -205,11 +215,43 @@ public class UserControllerTest {
 
     @Test
     public void testSaveBubble() throws Exception {
+        this.mockMvc.perform(post("/users/10000/bubbles").contentType(MediaType.APPLICATION_JSON)
+            .content("{\"content\":\"hello world\", \"latitude\":39.1, \"longitude\":115.5, \"distance\":2000}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
+        this.mockMvc.perform(post("/users/10000/bubbles").contentType(MediaType.APPLICATION_JSON)
+            .content("{\"content\":\"hello world\"}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        this.mockMvc.perform(post("/users/0/bubbles").contentType(MediaType.APPLICATION_JSON)
+            .content("{\"content\":\"hello world\"}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     public void testSaveReply() throws Exception {
+        this.mockMvc.perform(post("/users/0/replies").contentType(MediaType.APPLICATION_JSON)
+            .content("{\"content\":\"hello world\"}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
+        this.mockMvc.perform(post("/users/10000/replies").contentType(MediaType.APPLICATION_JSON)
+            .content("{\"content\":\"hello world\", \"latitude\":39.1, \"longitude\":115.5, \"distance\":2000}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        this.mockMvc.perform(post("/users/10000/bubbles").contentType(MediaType.APPLICATION_JSON)
+            .content("{\"content\":\"hello world\", \"latitude\":39.1, \"longitude\":115.5, \"distance\":2000, \"parentId\":10000, \"parentBubbleId\":10000}")
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
     }
 }

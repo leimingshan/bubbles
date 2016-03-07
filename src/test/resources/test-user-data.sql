@@ -1,9 +1,10 @@
 # clean data and insert test data
+SET FOREIGN_KEY_CHECKS=0;
 DELETE FROM `report` WHERE `id` BETWEEN 1 AND 5;
 DELETE FROM `feedback` WHERE `id` BETWEEN 1 AND 5;
-DELETE FROM `bubble` WHERE `id`='10001';
-DELETE FROM `bubble` WHERE `id`='10000';
-DELETE FROM `user` WHERE `id`='10000' OR `id`='10001';
+DELETE FROM `bubble` WHERE `author_id`=10000 OR `author_id`=10001;
+DELETE FROM `user` WHERE `id`=10000 OR `id`=10001;
+SET FOREIGN_KEY_CHECKS=1;
 
 INSERT INTO `user` VALUES ('10000', '000000000010000', '12345678912345678912', '10887322133', 'rayman', 'f', 'http://112.124.56.38/avatar/10000.jpg', '56', NOW(), NOW());
 INSERT INTO `user` VALUES ('10001', '000000000010001', '00000000000000012345','18734920714', 'liu', 'm', 'http://112.124.56.38/avatar/10001.jpg', '60', NOW(), NOW());
