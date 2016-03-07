@@ -68,16 +68,16 @@ public class BubbleRepositoryTest {
 
     @Test
     public void testFindHotBubbles() throws Exception {
-        List<Bubble> bubbleList = bubbleRepository.findHotBubbles(50.0, 52.0, 40.0, 41.0, new PageRequest(0, 10));
+        List<Bubble> bubbleList = bubbleRepository.findHotBubbles(39.0, 40.0, 115.0, 117.0, new PageRequest(0, 10));
         assertNotNull(bubbleList);
-        assertEquals(1, bubbleList.size());
+        assertEquals(2, bubbleList.size());
     }
 
     @Test
     public void testFindNewBubbles() throws Exception {
-        List<Bubble> bubbleList = bubbleRepository.findNewBubbles(50.0, 52.0, 40.0, 41.0, new PageRequest(0, 10));
+        List<Bubble> bubbleList = bubbleRepository.findNewBubbles(39.0, 40.0, 115.0, 117.0, new PageRequest(0, 10));
         assertNotNull(bubbleList);
-        assertEquals(1, bubbleList.size());
+        assertEquals(2, bubbleList.size());
     }
 
     @Test
