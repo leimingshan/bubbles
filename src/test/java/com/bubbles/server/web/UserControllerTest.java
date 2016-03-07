@@ -248,7 +248,7 @@ public class UserControllerTest {
             .andExpect(status().isUnprocessableEntity())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        this.mockMvc.perform(post("/users/10000/bubbles").contentType(MediaType.APPLICATION_JSON)
+        this.mockMvc.perform(post("/users/10000/replies").contentType(MediaType.APPLICATION_JSON)
             .content("{\"content\":\"hello world\", \"latitude\":39.1, \"longitude\":115.5, \"distance\":2000, \"parentId\":10000, \"parentBubbleId\":10000}")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
