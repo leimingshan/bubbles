@@ -9,9 +9,11 @@ buildscript {
         jcenter()
         maven { url "http://repo.spring.io/snapshot" }
         maven { url "http://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:1.2")
     }
 }
 
@@ -21,6 +23,7 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'jacoco'
+apply plugin: "org.sonarqube"
 
 jacoco {
     toolVersion "0.7.5.201505241946"
@@ -36,6 +39,7 @@ repositories {
     jcenter()
     maven { url "http://repo.spring.io/snapshot" }
     maven { url "http://repo.spring.io/milestone" }
+    maven { url "https://plugins.gradle.org/m2/" }
 }
 
 sourceCompatibility = 1.8
